@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS Depense (
 
 CREATE TABLE IF NOT EXISTS Economie (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    type ENUM('Ajouter', 'Retrait') NOT NULL,
+    types ENUM('Ajouter', 'Retrait') NOT NULL,
     montante DECIMAL(12,2) NOT NULL,
     descriptions VARCHAR(200),
     datee DATETIME DEFAULT CURRENT_TIMESTAMP,
