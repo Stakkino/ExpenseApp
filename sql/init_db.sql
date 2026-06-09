@@ -49,6 +49,5 @@ CREATE TABLE IF NOT EXISTS Economie (
     types ENUM('Ajouter', 'Retrait') NOT NULL,
     montante DECIMAL(12,2) NOT NULL,
     descriptions VARCHAR(200),
-    datee DATETIME DEFAULT CURRENT_TIMESTAMP,
-    CHECK (montante > 0)
+    datee DATETIME DEFAULT CURRENT_TIMESTAMP
 ); 

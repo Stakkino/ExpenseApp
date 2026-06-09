@@ -1,52 +1,50 @@
 from database.connection import DBConnection
+from decimal import Decimal
 
 
 #-----------------LES METHODES GET--------------------
 #-----------------------------------------------------
 #-------------------LES CALCULES----------------------
-def get_solde() -> float:
+def get_solde() -> Decimal:
     sql = "SELECT COALESCE(SUM(montantr), 0) FROM Recette"
     try :
         with DBConnection() as conx:
             curseur = conx.cursor()
             curseur.execute(sql)
-            return float(curseur.fetchone()[0])
+            return Decimal(curseur.fetchone()[0])
     except Exception as e:
         print(f"Erreur de Coonexion DB : {e}")
         return 0.0
 
 #-------------------------------------------------------
-def get_total_depense() -> float:
+def get_total_depense() -> Decimal:
     sql = "SELECT COALESCE(SUM(montantd), 0) FROM Depense"
     try :
         with DBConnection() as conx:
             curseur = conx.cursor()
             curseur.execute(sql)
-            return float(curseur.fetchone()[0])
+            return Decimal(curseur.fetchone()[0])
     except Exception as e:
         print(f"Erreur de Coonexion DB : {e}")
         return 0.0
 
 #--------------------------------------------------------
-def get_total_economie() -> float:
+def get_total_economie() -> Decimal:
     sql = """
-        SELECT COALESCE(SUM(CASE 
-                                WHEN types='Ajouter' THEN montante
-                                WHEN types='Retrait' THEN -montante 
-                            END), 0)
+        SELECT COALESCE(SUM(montante, 0)
         FROM Economie
         """
     try :
         with DBConnection() as conx:
             curseur = conx.cursor()
             curseur.execute(sql)
-            return float(curseur.fetchone()[0])
+            return Decimal(curseur.fetchone()[0])
     except Exception as e:
         print(f"Erreur de Coonexion DB : {e}")
         return 0.0
 
 #---------------------------------------------------------
-def get_solde_dispo() -> float:
+def get_solde_dispo() -> Decimal:
     try :
         with DBConnection() as conx:
             curseur = conx.cursor()
@@ -66,7 +64,7 @@ def get_solde_dispo() -> float:
 #--------------------LES METHODES SET---------------------
 #---------------------------------------------------------
 #-------------------------RECETTE-------------------------
-def ajoutrecette(montantr: float, descriptions: str) -> bool:
+def ajoutrecette(montantr: Decimal, descriptions: str) -> bool:
     montantr = abs(montantr)
     if montantr == 0:         
         return False
@@ -87,7 +85,7 @@ def ajoutrecette(montantr: float, descriptions: str) -> bool:
 
 
 #----------------------------DEPENSE----------------------------
-def ajoutdepense(categorie: int, descriptions: str, montantd: float) -> bool:
+def ajoutdepense(categorie: int, descriptions: str, montantd: Decimal) -> bool:
     montantd = abs(montantd)
     if montantd == 0:         
         return False
@@ -113,7 +111,7 @@ def ajoutdepense(categorie: int, descriptions: str, montantd: float) -> bool:
 
 
 #--------------------------ECONOMIE-----------------------------
-def ajouteconomie(types: str, montante: float, descriptions: str) -> bool:
+def actionconomie(types: str, montante: Decimal, descriptions: str) -> bool:
     montante = abs(montante)
     if montante == 0:          
         return False
@@ -129,6 +127,7 @@ def ajouteconomie(types: str, montante: float, descriptions: str) -> bool:
         if montante > solde_economie:
             print(f"Solde Économie est insuffisant : {solde_economie} Ar")
             return False
+        montante = - montante
 
     sql = """
         INSERT INTO Economie(types, montante, descriptions)
