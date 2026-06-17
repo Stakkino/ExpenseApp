@@ -3,3 +3,9 @@ __pycache__/
 *.pyc
 .vscode/
 config.py
+
+build/
+dist/
+*.spec
+
+resources_rc.py
