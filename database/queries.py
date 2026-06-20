@@ -31,7 +31,7 @@ def get_total_depense() -> Decimal:
 #--------------------------------------------------------
 def get_total_economie() -> Decimal:
     sql = """
-        SELECT COALESCE(SUM(montante, 0)
+        SELECT COALESCE(SUM(montante), 0)
         FROM Economie
         """
     try :
@@ -48,9 +48,9 @@ def get_solde_dispo() -> Decimal:
     try :
         with DBConnection() as conx:
             curseur = conx.cursor()
-            solde = get_solde(curseur)
-            depense = get_total_depense(curseur)
-            economie = get_total_economie(curseur)
+            solde = get_solde()
+            depense = get_total_depense()
+            economie = get_total_economie()
             return solde - depense - economie
     except Exception as e:
         print(f"Erreur de Coonexion DB : {e}")

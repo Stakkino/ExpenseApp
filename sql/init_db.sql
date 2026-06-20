@@ -4,6 +4,15 @@ COLLATE utf8mb4_unicode_ci;
 
 USE expenseapp;
 
+CREATE TABLE IF NOT EXISTS Utilisateur(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nom VARCHAR(80) NOT NULL,
+    prenom VARCHAR(250),
+    email VARCHAR(250) NOT NULL UNIQUE,
+    datenaissance DATE,
+    mdp VARCHAR(255) NOT NULL,
+    creat TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
 
 CREATE TABLE IF NOT EXISTS Categorie (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -26,9 +35,11 @@ INSERT INTO Categorie (nom, couleur)VALUES
 
 CREATE TABLE IF NOT EXISTS Recette (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    utilisateur int NOT NULL,
     montantr DECIMAL(12,2)NOT NULL,
     descriptions VARCHAR(100),
     dater DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (utilisateur) REFERENCES Utilisateur(id) ON DELETE CASCADE,
     CHECK (montantr > 0)
 );
 
@@ -36,18 +47,22 @@ CREATE TABLE IF NOT EXISTS Recette (
 CREATE TABLE IF NOT EXISTS Depense (
     id INT AUTO_INCREMENT PRIMARY KEY,
     categorie INT NOT NULL, 
+    utilisateur int NOT NULL,
     descriptions VARCHAR(200),
     montantd DECIMAL(12,2) NOT NULL,
     dated DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (categorie) REFERENCES Categorie(id),
+    FOREIGN KEY (utilisateur) REFERENCES Utilisateur(id) ON DELETE CASCADE,
     CHECK (montantd > 0)
 ); 
 
 
 CREATE TABLE IF NOT EXISTS Economie (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    utilisateur int NOT NULL,
     types ENUM('Ajouter', 'Retrait') NOT NULL,
     montante DECIMAL(12,2) NOT NULL,
     descriptions VARCHAR(200),
-    datee DATETIME DEFAULT CURRENT_TIMESTAMP
-); 
+    datee DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (utilisateur) REFERENCES Utilisateur(id) ON DELETE CASCADE
+);

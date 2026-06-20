@@ -1,0 +1,23 @@
+class Session:
+    utilisateur_id = None
+    utilisateur_nom = None
+    utilisateur_prenom = None
+    utilisateur_email = None
+
+    @classmethod
+    def connecter(cls, utilisateur):
+        cls.utilisateur_id = utilisateur[0]
+        cls.utilisateur_nom = utilisateur[1]
+        cls.utilisateur_prenom = utilisateur[2]
+        cls.utilisateur_email = utilisateur[3]
+
+    @classmethod
+    def deconnecter(cls):
+        cls.utilisateur_id = None
+        cls.utilisateur_nom = None
+        cls.utilisateur_prenom = None
+        cls.utilisateur_email = None
+
+    @classmethod
+    def est_connecte(cls):
+        return cls.utilisateur_id is not None

@@ -3,10 +3,10 @@ from PyQt6.QtGui import QIcon, QPixmap, QFont
 from PyQt6.QtCore import Qt, QSize
 
 from views.dashboard_widget import DashboardWidget
-from views.table_widget import TableWidget
+#from views.table_widget import TableWidget
 from views.depense_dialog import DepenseDialog
-from views.recette_dialog import RecetteDialog
-from views.economie_dialog import EconomieDialog
+#from views.recette_dialog import RecetteDialog
+#from views.economie_dialog import EconomieDialog
 from utils.constants import *
 from config import DB_CONFIG
 
@@ -139,11 +139,11 @@ class MainWindow(QMainWindow):
         # QStackedWidget = plusieurs pages, une seule visible à la fois
         self.pages = QStackedWidget()
         self.dashboard  = DashboardWidget()
-        self.table_widget = TableWidget()
+        #self.table_widget = TableWidget()
 
         self.pages.addWidget(self.dashboard)    # index 0
         self.pages.addWidget(QWidget())         # index 1 — Recettes  (à compléter)
-        self.pages.addWidget(self.table_widget) # index 2 — Dépenses
+        #self.pages.addWidget(self.table_widget) # index 2 — Dépenses
         self.pages.addWidget(QWidget())         # index 3 — Économies (à compléter)
         self.pages.addWidget(QWidget())         # index 4 — Historique(à compléter)
 
@@ -169,19 +169,19 @@ class MainWindow(QMainWindow):
         self.titre_page = titre  # gardé en référence pour changer selon la page
 
         # Boutons d'action
-        btn_recette  = self._creer_action_bouton("+ Recette",  VERT_RECETTE)
-        btn_depense  = self._creer_action_bouton("+ Dépense",  ROUGE_DEPENSE)
-        btn_economie = self._creer_action_bouton("+ Économie", BLEU_ECONOMIE)
+        # btn_recette  = self._creer_action_bouton("+ Recette",  VERT_RECETTE)
+        # btn_depense  = self._creer_action_bouton("+ Dépense",  ROUGE_DEPENSE)
+        # btn_economie = self._creer_action_bouton("+ Économie", BLEU_ECONOMIE)
 
-        btn_recette.clicked.connect(self._ouvrir_recette_dialog)
-        btn_depense.clicked.connect(self._ouvrir_depense_dialog)
-        btn_economie.clicked.connect(self._ouvrir_economie_dialog)
+        # btn_recette.clicked.connect(self._ouvrir_recette_dialog)
+        # btn_depense.clicked.connect(self._ouvrir_depense_dialog)
+        # btn_economie.clicked.connect(self._ouvrir_economie_dialog)
 
-        layout.addWidget(titre)
-        layout.addStretch()
-        layout.addWidget(btn_recette)
-        layout.addWidget(btn_depense)
-        layout.addWidget(btn_economie)
+        # layout.addWidget(titre)
+        # layout.addStretch()
+        # layout.addWidget(btn_recette)
+        # layout.addWidget(btn_depense)
+        # layout.addWidget(btn_economie)
 
         return topbar
 
@@ -213,17 +213,17 @@ class MainWindow(QMainWindow):
         self.titre_page.setText(titres[index])
 
     # ─────────────────────────────────────────
-    def _ouvrir_recette_dialog(self):
-        dialog = RecetteDialog(self)
-        if dialog.exec():           # exec() = attend que l'user ferme le dialog
-            self.dashboard.refresh()
+    # def _ouvrir_recette_dialog(self):
+    #     dialog = RecetteDialog(self)
+    #     if dialog.exec():           # exec() = attend que l'user ferme le dialog
+    #         self.dashboard.refresh()
 
     def _ouvrir_depense_dialog(self):
         dialog = DepenseDialog(self)
         if dialog.exec():
             self.dashboard.refresh()
 
-    def _ouvrir_economie_dialog(self):
-        dialog = EconomieDialog(self)
-        if dialog.exec():
-            self.dashboard.refresh()
+    # def _ouvrir_economie_dialog(self):
+    #     # dialog = EconomieDialog(self)
+    #     # if dialog.exec():
+    #     #     self.dashboard.refresh()

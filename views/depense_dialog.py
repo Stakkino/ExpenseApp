@@ -15,13 +15,11 @@ class DepenseDialog(QDialog):
         self._construire_ui()
         self._charger_categories()
 
-    # ─────────────────────────────────────────
     def _configurer_fenetre(self):
         self.setWindowTitle("Nouvelle Dépense")
         self.setFixedSize(380, 380)
         self.setStyleSheet(f"background-color: {FOND_SECONDAIRE};")
 
-    # ─────────────────────────────────────────
     def _construire_ui(self):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(24, 24, 24, 24)
