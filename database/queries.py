@@ -1,16 +1,17 @@
 from database.connection import DBConnection
 from decimal import Decimal
+from session import Session
 
 
 #-----------------LES METHODES GET--------------------
 #-----------------------------------------------------
 #-------------------LES CALCULES----------------------
 def get_solde() -> Decimal:
-    sql = "SELECT COALESCE(SUM(montantr), 0) FROM Recette"
+    sql = "SELECT COALESCE(SUM(montantr), 0) FROM Recette WHERE utilisateur = %s"
     try :
         with DBConnection() as conx:
             curseur = conx.cursor()
-            curseur.execute(sql)
+            curseur.execute(sql, (Session.utilisateur_id,))
             return Decimal(curseur.fetchone()[0])
     except Exception as e:
         print(f"Erreur de Coonexion DB : {e}")
@@ -18,11 +19,11 @@ def get_solde() -> Decimal:
 
 #-------------------------------------------------------
 def get_total_depense() -> Decimal:
-    sql = "SELECT COALESCE(SUM(montantd), 0) FROM Depense"
+    sql = "SELECT COALESCE(SUM(montantd), 0) FROM Depense WHERE utilisateur = %s"
     try :
         with DBConnection() as conx:
             curseur = conx.cursor()
-            curseur.execute(sql)
+            curseur.execute(sql, (Session.utilisateur_id,))
             return Decimal(curseur.fetchone()[0])
     except Exception as e:
         print(f"Erreur de Coonexion DB : {e}")
@@ -33,11 +34,12 @@ def get_total_economie() -> Decimal:
     sql = """
         SELECT COALESCE(SUM(montante), 0)
         FROM Economie
+        WHERE utilisateur = %s
         """
     try :
         with DBConnection() as conx:
             curseur = conx.cursor()
-            curseur.execute(sql)
+            curseur.execute(sql, (Session.utilisateur_id,))
             return Decimal(curseur.fetchone()[0])
     except Exception as e:
         print(f"Erreur de Coonexion DB : {e}")
@@ -65,18 +67,19 @@ def get_solde_dispo() -> Decimal:
 #---------------------------------------------------------
 #-------------------------RECETTE-------------------------
 def ajoutrecette(montantr: Decimal, descriptions: str) -> bool:
+    utilisateur = Session.utilisateur_id
     montantr = abs(montantr)
     if montantr == 0:         
         return False
     
     sql = """
-        INSERT INTO Recette (montantr, descriptions)
-        VALUES (%s, %s)
+        INSERT INTO Recette (utilisateur, montantr, descriptions)
+        VALUES (%s,%s, %s)
         """
     try :
         with DBConnection() as conx:
             curseur = conx.cursor()
-            curseur.execute(sql, (montantr, descriptions))
+            curseur.execute(sql, (utilisateur,montantr, descriptions))
             conx.commit()
             return True
     except Exception as e:
@@ -86,6 +89,7 @@ def ajoutrecette(montantr: Decimal, descriptions: str) -> bool:
 
 #----------------------------DEPENSE----------------------------
 def ajoutdepense(categorie: int, descriptions: str, montantd: Decimal) -> bool:
+    utilisateur = Session.utilisateur_id
     montantd = abs(montantd)
     if montantd == 0:         
         return False
@@ -96,13 +100,13 @@ def ajoutdepense(categorie: int, descriptions: str, montantd: Decimal) -> bool:
         return False
 
     sql = """
-        INSERT INTO Depense (categorie, descriptions, montantd)
-        VALUES (%s, %s, %s)
+        INSERT INTO Depense (utilisateur, categorie, descriptions, montantd)
+        VALUES (%s, %s, %s, %s)
         """
     try : 
         with DBConnection() as conx:
             curseur = conx.cursor()
-            curseur.execute(sql, (categorie, descriptions, montantd))
+            curseur.execute(sql, (utilisateur, categorie, descriptions, montantd))
             conx.commit()
             return True
     except Exception as e:
@@ -112,6 +116,7 @@ def ajoutdepense(categorie: int, descriptions: str, montantd: Decimal) -> bool:
 
 #--------------------------ECONOMIE-----------------------------
 def actionconomie(types: str, montante: Decimal, descriptions: str) -> bool:
+    utilisateur = Session.utilisateur_id
     montante = abs(montante)
     if montante == 0:          
         return False
@@ -130,13 +135,13 @@ def actionconomie(types: str, montante: Decimal, descriptions: str) -> bool:
         montante = - montante
 
     sql = """
-        INSERT INTO Economie(types, montante, descriptions)
-        VALUES (%s, %s, %s)
+        INSERT INTO Economie(utilisateur, types, montante, descriptions)
+        VALUES (%s, %s, %s, %s)
         """
     try :
         with DBConnection() as conx:
             curseur = conx.cursor()
-            curseur.execute(sql, (types, montante, descriptions))
+            curseur.execute(sql, (utilisateur, types, montante, descriptions))
             conx.commit()
             return True
     except Exception as e:
