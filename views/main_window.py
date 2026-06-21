@@ -1,12 +1,12 @@
-from PyQt6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QStackedWidget,QFrame)
+from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QStackedWidget,QFrame
 from PyQt6.QtGui import QIcon, QPixmap, QFont
 from PyQt6.QtCore import Qt, QSize
 
 from views.dashboard_widget import DashboardWidget
 #from views.table_widget import TableWidget
 from views.depense_dialog import DepenseDialog
-#from views.recette_dialog import RecetteDialog
-#from views.economie_dialog import EconomieDialog
+from views.recette_dialog import RecetteDialog
+from views.economie_dialog import EconomieDialog
 from utils.constants import *
 from config import DB_CONFIG
 
@@ -17,28 +17,23 @@ class MainWindow(QMainWindow):
         self._configurer_fenetre()
         self._construire_ui()
 
-    # ─────────────────────────────────────────
+
     def _configurer_fenetre(self):
         self.setWindowTitle("ExpenseApp")
         self.setMinimumSize(1100, 700)
         self.setStyleSheet(f"background-color: {FOND_PRINCIPAL};")
 
-    # ─────────────────────────────────────────
+   
     def _construire_ui(self):
-        # Widget central obligatoire @ QMainWindow
         central = QWidget()
         self.setCentralWidget(central)
-
-        # Layout principal : sidebar gauche + contenu droite
         layout_principal = QHBoxLayout(central)
         layout_principal.setContentsMargins(0, 0, 0, 0)
         layout_principal.setSpacing(0)
-
-        # Construction des 2 parties
         layout_principal.addWidget(self._creer_sidebar())
         layout_principal.addWidget(self._creer_contenu(), stretch=1)
 
-    # ─────────────────────────────────────────
+    
     def _creer_sidebar(self):
         sidebar = QFrame()
         sidebar.setFixedWidth(220)
@@ -64,7 +59,7 @@ class MainWindow(QMainWindow):
 
         return sidebar
 
-    # ─────────────────────────────────────────
+    
     def _creer_profil(self):
         frame = QFrame()
         frame.setStyleSheet(f"""
@@ -78,7 +73,7 @@ class MainWindow(QMainWindow):
         layout = QVBoxLayout(frame)
         layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        # Avatar
+        
         avatar_label = QLabel()
         avatar_label.setFixedSize(64, 64)
         avatar_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -101,7 +96,7 @@ class MainWindow(QMainWindow):
 
         return frame
 
-    # ─────────────────────────────────────────
+    
     def _creer_nav_bouton(self, texte: str, icone_path: str, index: int):
         btn = QPushButton(texte)
         btn.setIcon(QIcon(icone_path))
@@ -127,7 +122,7 @@ class MainWindow(QMainWindow):
         btn.clicked.connect(lambda: self._naviguer(index))
         return btn
 
-    # ─────────────────────────────────────────
+    
     def _creer_contenu(self):
         frame = QFrame()
         layout = QVBoxLayout(frame)
@@ -150,7 +145,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.pages)
         return frame
 
-    # ─────────────────────────────────────────
+    
     def _creer_topbar(self):
         topbar = QFrame()
         topbar.setFixedHeight(60)
@@ -168,24 +163,24 @@ class MainWindow(QMainWindow):
         titre.setStyleSheet(f"color: {TEXTE_PRINCIPAL}; font-size: 16px; font-weight: bold;")
         self.titre_page = titre  # gardé en référence pour changer selon la page
 
-        # Boutons d'action
-        # btn_recette  = self._creer_action_bouton("+ Recette",  VERT_RECETTE)
-        # btn_depense  = self._creer_action_bouton("+ Dépense",  ROUGE_DEPENSE)
-        # btn_economie = self._creer_action_bouton("+ Économie", BLEU_ECONOMIE)
+       
+        btn_recette  = self._creer_action_bouton("+ Recette",  VERT_RECETTE)
+        btn_depense  = self._creer_action_bouton("+ Dépense",  ROUGE_DEPENSE)
+        btn_economie = self._creer_action_bouton("+ Économie", BLEU_ECONOMIE)
 
-        # btn_recette.clicked.connect(self._ouvrir_recette_dialog)
-        # btn_depense.clicked.connect(self._ouvrir_depense_dialog)
-        # btn_economie.clicked.connect(self._ouvrir_economie_dialog)
+        btn_recette.clicked.connect(self._ouvrir_recette_dialog)
+        btn_depense.clicked.connect(self._ouvrir_depense_dialog)
+        btn_economie.clicked.connect(self._ouvrir_economie_dialog)
 
-        # layout.addWidget(titre)
-        # layout.addStretch()
-        # layout.addWidget(btn_recette)
-        # layout.addWidget(btn_depense)
-        # layout.addWidget(btn_economie)
+        layout.addWidget(titre)
+        layout.addStretch()
+        layout.addWidget(btn_recette)
+        layout.addWidget(btn_depense)
+        layout.addWidget(btn_economie)
 
         return topbar
 
-    # ─────────────────────────────────────────
+    
     def _creer_action_bouton(self, texte: str, couleur: str):
         btn = QPushButton(texte)
         btn.setFixedHeight(34)
@@ -206,24 +201,24 @@ class MainWindow(QMainWindow):
         """)
         return btn
 
-    # ─────────────────────────────────────────
+
     def _naviguer(self, index: int):
         self.pages.setCurrentIndex(index)
         titres = ["Dashboard", "Recettes", "Dépenses", "Économies", "Historique"]
         self.titre_page.setText(titres[index])
 
-    # ─────────────────────────────────────────
-    # def _ouvrir_recette_dialog(self):
-    #     dialog = RecetteDialog(self)
-    #     if dialog.exec():           # exec() = attend que l'user ferme le dialog
-    #         self.dashboard.refresh()
+    
+    def _ouvrir_recette_dialog(self):
+        dialog = RecetteDialog(self)
+        if dialog.exec():           
+            self.dashboard.refresh()
 
     def _ouvrir_depense_dialog(self):
         dialog = DepenseDialog(self)
         if dialog.exec():
             self.dashboard.refresh()
 
-    # def _ouvrir_economie_dialog(self):
-    #     # dialog = EconomieDialog(self)
-    #     # if dialog.exec():
-    #     #     self.dashboard.refresh()
+    def _ouvrir_economie_dialog(self):
+        dialog = EconomieDialog(self)
+        if dialog.exec():
+            self.dashboard.refresh()

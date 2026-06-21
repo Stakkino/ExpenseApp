@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, QFrame, QLabel, QSizePolicy)
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QFrame, QLabel, QSizePolicy
 from PyQt6.QtGui import QFont, QPixmap
 from PyQt6.QtCore import Qt
 
@@ -14,7 +14,7 @@ class DashboardWidget(QWidget):
         self._construire_ui()
         self.refresh()
 
-    # ─────────────────────────────────────────
+   
     def _construire_ui(self):
         layout = QVBoxLayout(self)
         layout.setContentsMargins(24, 24, 24, 24)
@@ -38,7 +38,7 @@ class DashboardWidget(QWidget):
         layout.addLayout(self.cartes_layout)
         layout.addStretch()
 
-    # ─────────────────────────────────────────
+   
     def _creer_carte(self, titre: str, valeur: str,
                      couleur: str, icone_path: str) -> QFrame:
         carte = QFrame()
@@ -104,7 +104,7 @@ class DashboardWidget(QWidget):
 
         return carte
 
-    # ─────────────────────────────────────────
+   
     def refresh(self):
         """Appelée après chaque INSERT — recharge les chiffres depuis la BDD."""
         self.carte_solde.label_valeur.setText(

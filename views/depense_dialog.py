@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import (QDialog, QVBoxLayout, QHBoxLayout, QLabel,QLineEdit, QComboBox, QDateTimeEdit, QPushButton,QMessageBox, QFrame)
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel,QLineEdit, QComboBox, QDateTimeEdit, QPushButton,QMessageBox, QFrame
 from PyQt6.QtGui import QFont
 from PyQt6.QtCore import Qt, QDateTime
 from decimal import Decimal, InvalidOperation
@@ -69,7 +69,7 @@ class DepenseDialog(QDialog):
         boutons_layout = QHBoxLayout()
         btn_annuler = QPushButton("Annuler")
         btn_annuler.setStyleSheet(self._style_bouton(FOND_INPUT, TEXTE_SECONDAIRE))
-        btn_annuler.clicked.connect(self.reject)  # ferme dialog, exec() renvoie False
+        btn_annuler.clicked.connect(self.reject) 
 
         btn_valider = QPushButton("Ajouter")
         btn_valider.setStyleSheet(self._style_bouton(ROUGE_DEPENSE, "#FFFFFF"))
@@ -83,13 +83,13 @@ class DepenseDialog(QDialog):
         self.label_solde.setText(
             f"Solde disponible : {get_solde_dispo():,.0f} Ar".replace(",", " "))
 
-    # ─────────────────────────────────────────
+    
     def _creer_label(self, texte: str) -> QLabel:
         label = QLabel(texte)
         label.setStyleSheet(f"color: {TEXTE_LABEL}; font-size: 11px; font-weight: bold;")
         return label
 
-    # ─────────────────────────────────────────
+    
     def _style_input(self) -> str:
         return f"""
             QWidget {{
@@ -102,7 +102,7 @@ class DepenseDialog(QDialog):
             }}
         """
 
-    # ─────────────────────────────────────────
+    
     def _style_bouton(self, bg: str, color: str) -> str:
         return f"""
             QPushButton {{
@@ -116,7 +116,7 @@ class DepenseDialog(QDialog):
             }}
         """
 
-    # ─────────────────────────────────────────
+   
     def _charger_categories(self):
         """Remplit le QComboBox avec les catégories de la table Categorie."""
         sql = "SELECT id, nom FROM Categorie ORDER BY nom"
@@ -130,45 +130,37 @@ class DepenseDialog(QDialog):
         except Exception as e:
             print(f"Erreur chargement catégories : {e}")
 
-    # ─────────────────────────────────────────
+    
     def _valider(self):
-        # ── 1. Récupération des valeurs saisies ──
-        texte_montant = self.input_montant.text().strip()
-        categorie_id  = self.combo_categorie.currentData()
-        description   = self.input_description.text().strip()
+        #Récupération des valeurs saisies ──
+        txt_montant   = self.input_montant.text().strip()
+        categorie     = self.combo_categorie.currentData()
+        descriptions  = self.input_description.text().strip()
         date_qt       = self.input_date.dateTime()
         date_python   = date_qt.toString("yyyy-MM-dd HH:mm:ss")
 
-        # ── 2. Validation montant ──
-        if not texte_montant:
+        if not txt_montant:
             QMessageBox.warning(self, "Champ vide", "Veuillez saisir un montant.")
             return
-
         try:
-            montant = Decimal(texte_montant)
+            montantd = Decimal(txt_montant)
         except InvalidOperation:
-            QMessageBox.warning(self, "Montant invalide",
-                                 "Le montant doit être un nombre valide.")
+            QMessageBox.warning(self, "Montant invalide", "Le montant doit être un nombre valide.")
+            return
+        if montantd <= 0:
+            QMessageBox.warning(self, "Montant invalide", "Le montant doit être supérieur à 0.")
             return
 
-        if montant <= 0:
-            QMessageBox.warning(self, "Montant invalide",
-                                 "Le montant doit être supérieur à 0.")
+        if categorie is None:
+            QMessageBox.warning(self, "Catégorie manquante", "Veuillez sélectionner une catégorie.")
             return
 
-        # ── 3. Validation catégorie ──
-        if categorie_id is None:
-            QMessageBox.warning(self, "Catégorie manquante",
-                                 "Veuillez sélectionner une catégorie.")
-            return
+        
+        succes = ajoutdepense(categorie, descriptions, montantd)
 
-        # ── 4. Appel à la base de données ──
-        succes = ajoutdepense(categorie_id, description, montant)
 
         if succes:
             QMessageBox.information(self, "Succès", "Dépense ajoutée avec succès.")
-            self.accept()  # ferme dialog, exec() renvoie True
+            self.accept() 
         else:
-            QMessageBox.critical(self, "Erreur",
-                "Impossible d'ajouter la dépense.\n"
-                "Vérifiez que le montant ne dépasse pas le solde disponible.")
+            QMessageBox.critical(self, "Erreur", "Impossible d'ajouter la dépense.\n""Vérifiez que le montant ne dépasse pas le solde disponible.")
