@@ -159,12 +159,13 @@ def get_all_recette() -> list:
     sql = """
         SELECT id, montantr, descriptions, dater
         FROM Recette
+        WHERE utilisateur = %s
         ORDER BY dater DESC
     """
     try :
         with DBConnection() as conx:
             curseur = conx.cursor()
-            curseur.execute(sql)
+            curseur.execute(sql, (Session.utilisateur_id))
             return curseur.fetchall()
     except Exception as e:
         print(f"Erreur des listes de Recette : {e}")
@@ -176,12 +177,13 @@ def get_all_depense() -> list:
         SELECT d.id, c.nom, d.descriptions, d.montantd, d.dated
         FROM Depense d
         JOIN Categorie c ON d.categorie = c.id
+        WHERE utilisateur = %s
         ORDER BY d.dated DESC
         """
     try :
         with DBConnection() as conx:
             curseur = conx.cursor()
-            curseur.execute(sql)
+            curseur.execute(sql, (Session.utilisateur_id))
             return curseur.fetchall()
     except Exception as e:
         print(f"Erreur des listes de Depense : {e}")
@@ -192,12 +194,13 @@ def get_all_economie() -> list:
     sql = """
         SELECT id, types, montante, descriptions, datee
         FROM Economie
+        WHERE utilisateur = %s
         ORDER BY datee DESC
         """
     try :
         with DBConnection() as conx:
             curseur = conx.cursor()
-            curseur.execute(sql)
+            curseur.execute(sql, (Session.utilisateur_id))
             return curseur.fetchall()
     except Exception as e:
         print(f"Erreur des listes d'Economie : {e}")
