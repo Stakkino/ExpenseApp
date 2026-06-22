@@ -15,7 +15,7 @@ class EconomieDialog(QDialog):
 
     def _configurer_fenetre(self):
         self.setWindowTitle("Nouvelle Économie")
-        self.setFixedSize(380, 380)
+        self.setFixedSize(380, 400)
         self.setStyleSheet(f"background-color: {FOND_SECONDAIRE};")
 
     def _construire_ui(self):
@@ -41,6 +41,7 @@ class EconomieDialog(QDialog):
         # ── Champ type ──
         layout.addWidget(self._creer_label("Type"))
         self.combo_type = QComboBox()
+        self.combo_type.addItems(['Ajouter', 'Retrait'])
         self.combo_type.setStyleSheet(self._style_input())
         layout.addWidget(self.combo_type)
 
@@ -58,14 +59,6 @@ class EconomieDialog(QDialog):
         self.input_description.setStyleSheet(self._style_input())
         layout.addWidget(self.input_description)
 
-        # ── Champ Date ──
-        layout.addWidget(self._creer_label("Date"))
-        self.input_date = QDateTimeEdit()
-        self.input_date.setDateTime(QDateTime.currentDateTime())
-        self.input_date.setCalendarPopup(True)
-        self.input_date.setStyleSheet(self._style_input())
-        layout.addWidget(self.input_date)
-
         layout.addStretch()
 
         # ── Boutons ──
@@ -75,7 +68,7 @@ class EconomieDialog(QDialog):
         btn_annuler.clicked.connect(self.reject)
 
         btn_valider = QPushButton("Ajouter")
-        btn_valider.setStyleSheet(self._style_bouton(VERT_RECETTE, "#FFFFFF"))
+        btn_valider.setStyleSheet(self._style_bouton(BLEU_ECONOMIE, "#FFFFFF"))
         btn_valider.clicked.connect(self._valider)
 
         boutons_layout.addWidget(btn_annuler)
@@ -119,3 +112,31 @@ class EconomieDialog(QDialog):
             }}
         """
     
+    def _valider(self):
+        txt_montant   = self.input_montant.text().strip()
+        types         = self.combo_type.currentText()
+        descriptions  = self.input_description.text().strip()
+
+        if not txt_montant:
+            QMessageBox.warning(self, "Champ vide", "Veuillez saisir un montant.")
+            return
+        try:
+            montante = Decimal(txt_montant)
+        except InvalidOperation:
+            QMessageBox.warning(self, "Montant invalide", "Le montant doit être un nombre valide.")
+            return
+        if montante <= 0:
+            QMessageBox.warning(self, "Montant invalide", "Le montant doit être supérieur à 0.")
+            return
+        
+        if types is None:
+            QMessageBox.warning(self, "Champ vide", "Veuillez choisir un type.")
+            return
+        
+        succes = actionconomie(types, montante, descriptions)
+
+        if succes:
+            QMessageBox.information(self, "Succès", "Économie ajoutée avec succès.")
+            self.accept() 
+        else:
+            QMessageBox.critical(self, "Erreur", "Impossible d'ajouter l'économie.\n""Vérifiez que le montant ne dépasse pas le solde économie.")

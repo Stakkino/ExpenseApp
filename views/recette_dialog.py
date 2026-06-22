@@ -42,14 +42,6 @@ class RecetteDialog(QDialog):
         self.input_description.setStyleSheet(self._style_input())
         layout.addWidget(self.input_description)
 
-        # ── Champ Date ──
-        layout.addWidget(self._creer_label("Date"))
-        self.input_date = QDateTimeEdit()
-        self.input_date.setDateTime(QDateTime.currentDateTime())
-        self.input_date.setCalendarPopup(True)
-        self.input_date.setStyleSheet(self._style_input())
-        layout.addWidget(self.input_date)
-
         layout.addStretch()
 
         # ── Boutons ──
@@ -101,8 +93,6 @@ class RecetteDialog(QDialog):
     def _valider(self):
         txt_montant   = self.input_montant.text().strip()
         descriptions  = self.input_description.text().strip()
-        date_qt       = self.input_date.dateTime()
-        date_python   = date_qt.toString("yyyy-MM-dd HH:mm:ss")
 
         if not txt_montant:
             QMessageBox.warning(self, "Champ vide", "Veuillez saisir un montant.")
@@ -119,7 +109,7 @@ class RecetteDialog(QDialog):
         succes = ajoutrecette(montantr, descriptions)
 
         if succes:
-            QMessageBox.information(self, "Succès", "Dépense ajoutée avec succès.")
+            QMessageBox.information(self, "Succès", "Recette ajoutée avec succès.")
             self.accept()
         else:
-            QMessageBox.critical(self, "Erreur", "Impossible d'ajouter la dépense.\n""Vérifiez que le montant ne dépasse pas le solde disponible.")
+            QMessageBox.critical(self, "Erreur", "Impossible d'ajouter la Recette.")

@@ -55,14 +55,6 @@ class DepenseDialog(QDialog):
         self.input_description.setStyleSheet(self._style_input())
         layout.addWidget(self.input_description)
 
-        # ── Champ Date ──
-        layout.addWidget(self._creer_label("Date"))
-        self.input_date = QDateTimeEdit()
-        self.input_date.setDateTime(QDateTime.currentDateTime())
-        self.input_date.setCalendarPopup(True)
-        self.input_date.setStyleSheet(self._style_input())
-        layout.addWidget(self.input_date)
-
         layout.addStretch()
 
         # ── Boutons ──
@@ -132,12 +124,9 @@ class DepenseDialog(QDialog):
 
     
     def _valider(self):
-        #Récupération des valeurs saisies ──
         txt_montant   = self.input_montant.text().strip()
         categorie     = self.combo_categorie.currentData()
         descriptions  = self.input_description.text().strip()
-        date_qt       = self.input_date.dateTime()
-        date_python   = date_qt.toString("yyyy-MM-dd HH:mm:ss")
 
         if not txt_montant:
             QMessageBox.warning(self, "Champ vide", "Veuillez saisir un montant.")
@@ -155,9 +144,7 @@ class DepenseDialog(QDialog):
             QMessageBox.warning(self, "Catégorie manquante", "Veuillez sélectionner une catégorie.")
             return
 
-        
         succes = ajoutdepense(categorie, descriptions, montantd)
-
 
         if succes:
             QMessageBox.information(self, "Succès", "Dépense ajoutée avec succès.")

@@ -27,8 +27,8 @@ class DashboardWidget(QWidget):
         # Création des 4 cartes — gardées en référence pour refresh()
         self.carte_solde    = self._creer_carte("Solde Total",      "0 Ar", JAUNE_SOLDE,    "assets/icons/solde.png")
         self.carte_depense  = self._creer_carte("Total Dépenses",   "0 Ar", ROUGE_DEPENSE,  "assets/icons/depense.png")
-        self.carte_economie = self._creer_carte("Économies",        "0 Ar", BLEU_ECONOMIE,  "assets/icons/economie.png")
-        self.carte_dispo    = self._creer_carte("Solde Disponible", "0 Ar", VERT_RECETTE,   "assets/icons/dispo.png")
+        self.carte_economie = self._creer_carte("Économies",        "0 Ar", BLEU_ECONOMIE,  "assets/icons/econimie.png")
+        self.carte_dispo    = self._creer_carte("Solde Disponible", "0 Ar", VERT_RECETTE,   "assets/icons/sdispo.png")
 
         self.cartes_layout.addWidget(self.carte_solde)
         self.cartes_layout.addWidget(self.carte_depense)
