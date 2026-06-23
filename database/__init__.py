@@ -4,6 +4,7 @@ from .queries import (
     get_total_depense,
     get_total_economie,
     get_solde_dispo,
+    incription,
     ajoutrecette,
     ajoutdepense,
     actionconomie,

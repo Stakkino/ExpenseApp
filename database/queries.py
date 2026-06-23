@@ -1,6 +1,8 @@
 from database.connection import DBConnection
 from decimal import Decimal
 from session import Session
+from datetime import date
+import bcrypt
 
 
 #-----------------LES METHODES GET--------------------
@@ -65,6 +67,26 @@ def get_solde_dispo() -> Decimal:
 
 #--------------------LES METHODES SET---------------------
 #---------------------------------------------------------
+#----------------------UTILISATEUR------------------------
+def incription(nom : str, prenom : str, email : str, datenaissance : date, mdp : str) -> bool :
+    a = mdp.encode('utf-8')
+    b = bcrypt.gensalt()
+    mdp = bcrypt.hashpw(a,b)
+
+    sql = """ INSERT INTO Utilisateur (nom, prenom, email, datenaissance, mdp)
+              VALUES = %s, %s, %s, %s, %s
+        """
+    try:
+        with DBConnection as conx:
+            curseur = conx.cursor()
+            curseur.execute(sql, (nom, prenom, email, datenaissance, mdp))
+            conx.commit()
+            return True
+    except Exception as e:
+        print(f"Erreur Ajouter Recette : {e}")
+        return False
+
+
 #-------------------------RECETTE-------------------------
 def ajoutrecette(montantr: Decimal, descriptions: str) -> bool:
     utilisateur = Session.utilisateur_id
