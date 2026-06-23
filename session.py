@@ -3,6 +3,7 @@ class Session:
     utilisateur_nom = None
     utilisateur_prenom = None
     utilisateur_email = None
+    utilisateur_datenaissance = None
 
     @classmethod
     def connecter(cls, utilisateur):
@@ -10,6 +11,7 @@ class Session:
         cls.utilisateur_nom = utilisateur[1]
         cls.utilisateur_prenom = utilisateur[2]
         cls.utilisateur_email = utilisateur[3]
+        cls.utilisateur_datenaissance = utilisateur[4]
 
     @classmethod
     def deconnecter(cls):
@@ -17,6 +19,7 @@ class Session:
         cls.utilisateur_nom = None
         cls.utilisateur_prenom = None
         cls.utilisateur_email = None
+        cls.utilisateur_datenaissance = None
 
     @classmethod
     def est_connecte(cls):
