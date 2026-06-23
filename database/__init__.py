@@ -1,5 +1,6 @@
 from .connection import DBConnection
 from .queries import (
+    verifier_utilisateur,
     get_solde,
     get_total_depense,
     get_total_economie,

@@ -7,6 +7,29 @@ import bcrypt
 
 #-----------------LES METHODES GET--------------------
 #-----------------------------------------------------
+#-----------------------LOGIN-------------------------
+def verifier_utilisateur(email: str, mdp:str) -> bool:
+    sql = """SELECT id,nom,prenom,email,datenaissance,mdp 
+            FROM Utilisateur
+            WHERE email = %s
+        """
+    try:
+        with DBConnection as conx:
+            curseur = conx.cursor()
+            curseur.execute(sql,(email))
+            utilisateur = curseur.fetchone()
+            curseur.close()
+
+            if utilisateur and utilisateur[4] == mdp:
+                return utilisateur
+            return None
+    except Exception as e:
+        print(f"Erreur de Coonexion DB : {e}")
+        return False
+        
+                
+
+
 #-------------------LES CALCULES----------------------
 def get_solde() -> Decimal:
     sql = "SELECT COALESCE(SUM(montantr), 0) FROM Recette WHERE utilisateur = %s"
