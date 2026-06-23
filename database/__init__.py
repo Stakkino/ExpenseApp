@@ -6,6 +6,7 @@ from .queries import (
     get_total_economie,
     get_solde_dispo,
     incription,
+    modification_info,
     ajoutrecette,
     ajoutdepense,
     actionconomie,

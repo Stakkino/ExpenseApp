@@ -26,10 +26,7 @@ def verifier_utilisateur(email: str, mdp:str) -> bool:
     except Exception as e:
         print(f"Erreur de Coonexion DB : {e}")
         return False
-        
-                
-
-
+                  
 #-------------------LES CALCULES----------------------
 def get_solde() -> Decimal:
     sql = "SELECT COALESCE(SUM(montantr), 0) FROM Recette WHERE utilisateur = %s"
@@ -109,6 +106,21 @@ def incription(nom : str, prenom : str, email : str, datenaissance : date, mdp :
         print(f"Erreur Ajouter Recette : {e}")
         return False
 
+#------------------MISE A JOUR PROFIL---------------------
+def modification_info(nom:str, prenom:str, email:str, datenaissance:date) -> bool:
+    sql = """ UPDATE Utilisateur
+              SET nom = %s, prenom = %s, email = %s, datenaissance = %s
+              WHERE id = %s
+        """ 
+    try:
+        with DBConnection as conx:
+            curseur = conx.cursor()
+            curseur.execute(sql, (nom,prenom,email,datenaissance,Session.utilisateur_id))
+            conx.commit()
+            return True
+    except Exception as e:
+        print(f"Erreur de Modification Profil : {e}")
+        return False
 
 #-------------------------RECETTE-------------------------
 def ajoutrecette(montantr: Decimal, descriptions: str) -> bool:
