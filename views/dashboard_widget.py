@@ -10,6 +10,7 @@ from utils.constants import *
 class DashboardWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         self.setStyleSheet(f"background-color: {FOND_PRINCIPAL};")
         self._construire_ui()
         self.refresh()
@@ -49,7 +50,6 @@ class DashboardWidget(QWidget):
             QFrame {{
                 background-color: {FOND_CARTE};
                 border-radius: 12px;
-                border-left: 4px solid {couleur};
             }}
         """)
 
@@ -62,7 +62,7 @@ class DashboardWidget(QWidget):
         icone_label.setFixedSize(40, 40)
         icone_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         icone_label.setStyleSheet(f"""
-            background-color: {couleur}22;
+            background-color: {couleur};
             border-radius: 20px;
         """)
         pixmap = QPixmap(icone_path)

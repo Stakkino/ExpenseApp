@@ -1,6 +1,5 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel,QLineEdit, QComboBox, QDateTimeEdit, QPushButton,QMessageBox, QFrame
-from PyQt6.QtGui import QFont, QPixmap
-from PyQt6.QtCore import Qt, QDateTime
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel,QLineEdit, QComboBox, QDateTimeEdit, QPushButton,QMessageBox
+from PyQt6.QtCore import Qt
 from decimal import Decimal, InvalidOperation
 
 from database import ajoutrecette
@@ -10,6 +9,7 @@ from utils.constants import *
 class RecetteDialog(QDialog):
     def __init__(self, parent = None ):
         super().__init__(parent)
+        self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         self._configurer_fenetre()
         self._construire_ui()
 

@@ -1,8 +1,6 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel,QLineEdit, QComboBox, QDateTimeEdit, QPushButton,QMessageBox, QFrame
-from PyQt6.QtGui import QFont
-from PyQt6.QtCore import Qt, QDateTime
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel,QLineEdit, QComboBox, QDateTimeEdit, QPushButton,QMessageBox
+from PyQt6.QtCore import Qt
 from decimal import Decimal, InvalidOperation
-
 from database import ajoutdepense, get_solde_dispo
 from database.connection import DBConnection
 from utils.constants import *
@@ -11,13 +9,14 @@ from utils.constants import *
 class DepenseDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         self._configurer_fenetre()
         self._construire_ui()
         self._charger_categories()
 
     def _configurer_fenetre(self):
         self.setWindowTitle("Nouvelle Dépense")
-        self.setFixedSize(380, 380)
+        self.setFixedSize(380, 400)
         self.setStyleSheet(f"background-color: {FOND_SECONDAIRE};")
 
     def _construire_ui(self):

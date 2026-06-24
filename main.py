@@ -1,23 +1,132 @@
 import sys
-from PyQt6.QtWidgets import QApplication
+from PyQt6.QtWidgets import QApplication, QDialog, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QFrame
+from PyQt6.QtGui import QPixmap, QIcon
+from PyQt6.QtCore import Qt, QSize, QPoint
 
-from database.connection import DBConnection
 from views.main_window import MainWindow
+from views.login_dialog import LoginDialog      
+from views.incription_dialog import InscriptionDialog 
+from utils.constants import *
+from database import DBConnection
 
-app = QApplication(sys.argv)
+class WelcomeWindow(QDialog):
+    def __init__(self):
+        super().__init__()
+        self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
+        self.setFixedSize(400, 500)
+        self.setStyleSheet(f"background-color: {FOND_SECONDAIRE}; border-radius: 12px;")
+        self._old_pos = None
+        self._init_ui()
 
-db = DBConnection()
-conn = db.connect()
+    def mousePressEvent(self, event):
+        if event.button() == Qt.MouseButton.LeftButton:
+            self._old_pos = event.globalPosition().toPoint()
+    def mouseMoveEvent(self, event):
+        if self._old_pos is not None:
+            delta = QPoint(event.globalPosition().toPoint() - self._old_pos)
+            self.move(self.x() + delta.x(), self.y() + delta.y())
+            self._old_pos = event.globalPosition().toPoint()
+    def mouseReleaseEvent(self, event):
+        self._old_pos = None
 
-if conn:
-    print("Connexion réussie !")
+    def _init_ui(self):
+        layout_principal = QVBoxLayout(self)
+        layout_principal.setContentsMargins(20, 15, 20, 30)
+        layout_principal.setSpacing(20)
 
-    window = MainWindow()
-    window.show()
+        top_bar = QHBoxLayout()
+        top_bar.addStretch()
+        btn_close = QPushButton()
+        btn_close.setFixedSize(12, 12)
+        btn_close.setStyleSheet("""
+            QPushButton { background-color: #374151; border: none; border-radius: 6px; }
+            QPushButton:hover { background-color: #ff5f56; }
+        """)
+        btn_close.clicked.connect(self.close)
+        top_bar.addWidget(btn_close)
+        layout_principal.addLayout(top_bar)
 
-    conn.close()
+        layout_principal.addStretch()
 
-    sys.exit(app.exec())
+        self.logo_label = QLabel()
+        pixmap = QPixmap("assets/icons/home.png") 
+        if not pixmap.isNull():
+            pixmap = pixmap.scaled(100, 100, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+            self.logo_label.setPixmap(pixmap)
+        self.logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout_principal.addWidget(self.logo_label)
 
-else:
-    print("Échec de connexion.")
+        title_app = QLabel("ExpenseApp")
+        title_app.setStyleSheet(f"color: {TEXTE_PRINCIPAL}; font-size: 24px; font-weight: bold;")
+        title_app.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout_principal.addWidget(title_app)
+
+        subtitle = QLabel("Gérez vos finances en toute simplicité")
+        subtitle.setStyleSheet(f"color: {TEXTE_SECONDAIRE}; font-size: 13px;")
+        subtitle.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        layout_principal.addWidget(subtitle)
+
+        layout_principal.addStretch()
+
+        #----------------se connecter--------------
+        self.btn_login = QPushButton("Se connecter")
+        self.btn_login.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.btn_login.setStyleSheet(f"""
+            QPushButton {{
+                background-color: {ACCENT_PRIMAIRE};
+                color: white;
+                border: none;
+                border-radius: 8px;
+                padding: 12px;
+                font-size: 14px;
+                font-weight: bold;
+            }}
+            QPushButton:hover {{ background-color: #2b82c9; }}
+        """)
+        self.btn_login.clicked.connect(self._ouvrir_login)
+        layout_principal.addWidget(self.btn_login)
+
+        # -------------------S'inscrire-----------------------
+        self.btn_register = QPushButton("Créer un compte (S'inscrire)")
+        self.btn_register.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.btn_register.setStyleSheet(f"""
+            QPushButton {{
+                background-color: {FOND_INPUT};
+                color: {TEXTE_PRINCIPAL};
+                border: 1px solid {BORDURE};
+                border-radius: 8px;
+                padding: 12px;
+                font-size: 14px;
+                font-weight: bold;
+            }}
+            QPushButton:hover {{ background-color: {FOND_CARTE}; }}
+        """)
+        self.btn_register.clicked.connect(self._ouvrir_inscription)
+        layout_principal.addWidget(self.btn_register)
+
+    def _ouvrir_login(self):
+        self.hide()
+        dialog = LoginDialog(self)
+        if dialog.exec(): 
+            self.accept()
+        else:
+            self.show()  
+
+    def _ouvrir_inscription(self):
+        self.hide()
+        dialog = InscriptionDialog(self)
+        dialog.exec() 
+        self.show()
+
+def main():
+    app = QApplication(sys.argv)
+    welcome = WelcomeWindow()
+    if welcome.exec():
+        window = MainWindow()
+        window.show()
+        sys.exit(app.exec())
+    
+    sys.exit(0)
+
+if __name__ == "__main__":
+    main()

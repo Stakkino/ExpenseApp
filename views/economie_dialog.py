@@ -1,21 +1,20 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel,QLineEdit, QComboBox, QDateTimeEdit, QPushButton,QMessageBox, QFrame
-from PyQt6.QtGui import QFont
-from PyQt6.QtCore import Qt, QDateTime
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel,QLineEdit, QComboBox, QPushButton,QMessageBox
+from PyQt6.QtCore import Qt
 from decimal import Decimal, InvalidOperation
 
 from database import actionconomie,get_solde_dispo, get_total_economie
-from database.connection import DBConnection
 from utils.constants import *
 
 class EconomieDialog(QDialog):
     def __init__(self, parent = None):
         super().__init__(parent)
+        self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         self._configurer_fenetre()
         self._construire_ui()
 
     def _configurer_fenetre(self):
         self.setWindowTitle("Nouvelle Économie")
-        self.setFixedSize(380, 400)
+        self.setFixedSize(380, 440)
         self.setStyleSheet(f"background-color: {FOND_SECONDAIRE};")
 
     def _construire_ui(self):
