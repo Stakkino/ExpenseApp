@@ -1,5 +1,5 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QDialog, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QFrame
+from PyQt6.QtWidgets import QApplication, QDialog, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QWidget
 from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6.QtCore import Qt, QSize, QPoint
 
@@ -9,7 +9,7 @@ from views.incription_dialog import InscriptionDialog
 from utils.constants import *
 from database import DBConnection
 
-class WelcomeWindow(QDialog):
+class WelcomeWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
@@ -121,12 +121,8 @@ class WelcomeWindow(QDialog):
 def main():
     app = QApplication(sys.argv)
     welcome = WelcomeWindow()
-    if welcome.exec():
-        window = MainWindow()
-        window.show()
-        sys.exit(app.exec())
-    
-    sys.exit(0)
+    welcome.show()
+    sys.exit(app.exec())
 
 if __name__ == "__main__":
     main()

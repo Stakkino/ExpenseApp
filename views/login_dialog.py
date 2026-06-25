@@ -46,15 +46,15 @@ class LoginDialog(QDialog):
 
         # ── Boutons ──
         boutons_layout = QHBoxLayout()
-        btn_annuler = QPushButton("Annuler")
-        btn_annuler.setStyleSheet(self._style_bouton(FOND_INPUT, TEXTE_SECONDAIRE))
-        btn_annuler.clicked.connect(self.reject)
+        btn_retour = QPushButton("Retour")
+        btn_retour.setStyleSheet(self._style_bouton(FOND_INPUT, TEXTE_SECONDAIRE))
+        btn_retour.clicked.connect(self.reject)
 
         btn_valider = QPushButton("Se connecter")
         btn_valider.setStyleSheet(self._style_bouton(BLEU_ECONOMIE, "#FFFFFF"))
         btn_valider.clicked.connect(self._valider)
 
-        boutons_layout.addWidget(btn_annuler)
+        boutons_layout.addWidget(btn_retour)
         boutons_layout.addWidget(btn_valider)
         layout.addLayout(boutons_layout)
 
