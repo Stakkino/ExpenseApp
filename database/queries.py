@@ -14,7 +14,7 @@ def verifier_utilisateur(email: str, mdp:str) -> bool:
             WHERE email = %s
         """
     try:
-        with DBConnection as conx:
+        with DBConnection() as conx:
             curseur = conx.cursor()
             curseur.execute(sql,(email))
             utilisateur = curseur.fetchone()
@@ -97,7 +97,7 @@ def incription(nom : str, prenom : str, email : str, datenaissance : date, mdp :
               VALUES = %s, %s, %s, %s, %s
         """
     try:
-        with DBConnection as conx:
+        with DBConnection() as conx:
             curseur = conx.cursor()
             curseur.execute(sql, (nom, prenom, email, datenaissance, mdp))
             conx.commit()
@@ -113,7 +113,7 @@ def modification_info(nom:str, prenom:str, email:str, datenaissance:date) -> boo
               WHERE id = %s
         """ 
     try:
-        with DBConnection as conx:
+        with DBConnection() as conx:
             curseur = conx.cursor()
             curseur.execute(sql, (nom,prenom,email,datenaissance,Session.utilisateur_id))
             conx.commit()
