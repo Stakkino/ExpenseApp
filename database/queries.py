@@ -94,7 +94,7 @@ def incription(nom : str, prenom : str, email : str, datenaissance : date, mdp :
     mdp = bcrypt.hashpw(a,b)
 
     sql = """ INSERT INTO Utilisateur (nom, prenom, email, datenaissance, mdp)
-              VALUES = %s, %s, %s, %s, %s
+              VALUES (%s, %s, %s, %s, %s)
         """
     try:
         with DBConnection() as conx:
