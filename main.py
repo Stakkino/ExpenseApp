@@ -49,9 +49,9 @@ class WelcomeWindow(QWidget):
         layout_principal.addStretch()
 
         self.logo_label = QLabel()
-        pixmap = QPixmap("assets/icons/home.png") 
+        pixmap = QPixmap("assets/icons/logo.png")
         if not pixmap.isNull():
-            pixmap = pixmap.scaled(100, 100, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+            pixmap = pixmap.scaled(140, 140, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
             self.logo_label.setPixmap(pixmap)
         self.logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout_principal.addWidget(self.logo_label)
@@ -77,8 +77,8 @@ class WelcomeWindow(QWidget):
                 color: white;
                 border: none;
                 border-radius: 8px;
-                padding: 12px;
-                font-size: 16px;
+                padding: 10px;
+                font-size: 20px;
                 font-weight: bold;
             }}
             QPushButton:hover {{ background-color: #2b82c9; }}
