@@ -29,6 +29,9 @@ class MainWindow(QMainWindow):
         self.setStyleSheet(f"""
             QMainWindow {{
                 background-color: {FOND_PRINCIPAL};
+                background-image: url("assets/avatars/logo.png");
+                background-repeat: no-repeat;
+                background-position: center;
             }}
             QPushButton#btn_close, QPushButton#btn_min, QPushButton#btn_max {{
                 border: none;

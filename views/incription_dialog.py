@@ -15,7 +15,7 @@ class InscriptionDialog(QDialog):
 
     def _configurer_fenetre(self):
         self.setWindowTitle("Expense Application")
-        self.setFixedSize(420, 630)
+        self.setFixedSize(450, 630)
         self.setStyleSheet(f"background-color: {FOND_SECONDAIRE};")
 
     def _construire_ui(self):

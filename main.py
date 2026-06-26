@@ -78,7 +78,7 @@ class WelcomeWindow(QWidget):
                 border: none;
                 border-radius: 8px;
                 padding: 12px;
-                font-size: 14px;
+                font-size: 16px;
                 font-weight: bold;
             }}
             QPushButton:hover {{ background-color: #2b82c9; }}
