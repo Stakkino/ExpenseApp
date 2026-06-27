@@ -9,6 +9,7 @@ import bcrypt
 #-----------------------------------------------------
 #-----------------------LOGIN-------------------------
 def verifier_utilisateur(email: str, mdp:str) -> bool:
+
     sql = """SELECT id,nom,prenom,email,datenaissance,mdp 
             FROM Utilisateur
             WHERE email = %s
@@ -16,12 +17,17 @@ def verifier_utilisateur(email: str, mdp:str) -> bool:
     try:
         with DBConnection() as conx:
             curseur = conx.cursor()
-            curseur.execute(sql,(email))
+            curseur.execute(sql,(email,))
             utilisateur = curseur.fetchone()
             curseur.close()
-
-            if utilisateur and utilisateur[4] == mdp:
-                return utilisateur
+            
+            if utilisateur is not None:
+                hdb = utilisateur[5]
+                if hdb is not None:
+                    mdpbt = mdp.encode('utf-8')
+                    hmdpbt = hdb.encode('utf-8')
+                    if bcrypt.checkpw(mdpbt, hmdpbt):
+                        return utilisateur
             return None
     except Exception as e:
         print(f"Erreur de Coonexion DB : {e}")
