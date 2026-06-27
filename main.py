@@ -49,9 +49,9 @@ class WelcomeWindow(QWidget):
         layout_principal.addStretch()
 
         self.logo_label = QLabel()
-        pixmap = QPixmap("assets/icons/logo.png")
+        pixmap = QPixmap("assets/icons/logo3.png")
         if not pixmap.isNull():
-            pixmap = pixmap.scaled(140, 140, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
+            pixmap = pixmap.scaled(160, 160, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
             self.logo_label.setPixmap(pixmap)
         self.logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout_principal.addWidget(self.logo_label)
@@ -107,16 +107,20 @@ class WelcomeWindow(QWidget):
     def _ouvrir_login(self):
         self.hide()
         dialog = LoginDialog(self)
-        if dialog.exec(): 
-            self.accept()
+        if dialog.exec() == QDialog.DialogCode.Accepted: 
+            self.main_window = MainWindow()
+            self.main_window.show()
+            self.close()
         else:
             self.show()  
 
     def _ouvrir_inscription(self):
         self.hide()
         dialog = InscriptionDialog(self)
-        dialog.exec() 
-        self.show()
+        if dialog.exec() == QDialog.DialogCode.Accepted:
+            self._ouvrir_login()
+        else:
+            self.show()
 
 def main():
     app = QApplication(sys.argv)

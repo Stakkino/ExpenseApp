@@ -149,7 +149,7 @@ class InscriptionDialog(QDialog):
         succes = incription(nom, prenom, email, datenaissance, mdp)
 
         if succes:
-            QMessageBox.information(self, "Succès", "Incrire avec succès.")
+            #QMessageBox.information(self, "Succès", "Incrire avec succès.")
             self.accept() 
         else:
             QMessageBox.critical(self, "Erreur", "Impossible d'inscrire.\n""Vérifiez la connexion ou les champs !.")

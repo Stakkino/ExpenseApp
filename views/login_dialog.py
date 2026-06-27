@@ -4,6 +4,7 @@ from session import Session
 from database import verifier_utilisateur
 from database.connection import DBConnection
 from utils.constants import *
+import bcrypt
 
 class LoginDialog(QDialog):
     def __init__(self, parent = None):
@@ -101,7 +102,7 @@ class LoginDialog(QDialog):
 
         if utilisateur:
             Session.connecter(utilisateur[0:5])
-            QMessageBox.information(self, "Succès", f"Bienvenu, Tongasoa {Session.utilisateur_prenom} !")
+            #QMessageBox.information(self, "Succès", f"Bienvenu, Tongasoa {Session.utilisateur_prenom} !")
             self.accept()
         else:
             QMessageBox.critical(self, "Erreur", "Vérifiez l'email ou le mot de passe !.")

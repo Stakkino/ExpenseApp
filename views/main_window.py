@@ -69,11 +69,11 @@ class MainWindow(QMainWindow):
     
     def _creer_sidebar(self):
         sidebar = QFrame()
-        sidebar.setFixedWidth(150)
+        sidebar.setFixedWidth(180)
         sidebar.setStyleSheet(f"""
             QFrame {{
                 background-color: {FOND_SECONDAIRE};
-                border-right: 1px solid {BORDURE};
+                
             }}
         """)
 
@@ -88,7 +88,13 @@ class MainWindow(QMainWindow):
         layout.addWidget(self._creer_nav_bouton("  Dépenses",   "assets/icons/depense.png",  2))
         layout.addWidget(self._creer_nav_bouton("  Économies",  "assets/icons/econimie.png",  3))
         layout.addWidget(self._creer_nav_bouton("  Historique", "assets/icons/historique.png",  4))
-        layout.addStretch()  # pousse tout vers le haut
+        layout.addStretch()  
+
+        btn_parametres = self._creer_nav_bouton("  Paramètres", "assets/icons/settings.png", -1)
+        btn_parametres.clicked.disconnect() 
+        btn_parametres.clicked.connect(self._ouvrir_profil_dialog)
+        
+        layout.addWidget(btn_parametres)
 
         return sidebar
 
@@ -106,28 +112,22 @@ class MainWindow(QMainWindow):
         layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         
-        avatar_btn = QPushButton()
-        avatar_btn.setFixedSize(64, 64)
-        avatar_btn.setStyleSheet("""
-                                QPushButton {border-radius:32px; border:2px solid #3D9BE9; background-color:transparnet;}
-                                QPushButton:hover {border:2px solid #FFFFFF;}
-                                 """)
+        avatar_label = QLabel()
+        avatar_label.setFixedSize(64, 64)
+        avatar_label.setStyleSheet("border-radius:32px; border:2px solid #3D9BE9;")
 
-        pixmap = QPixmap(DB_CONFIG.get("avatar", "assets/avatars/young-man.png"))
+        pixmap = QPixmap(DB_CONFIG.get("avatar", "assets/avatars/family.png"))
         if not pixmap.isNull():
-            pixmap = pixmap.scaled(64, 64,
-                Qt.AspectRatioMode.KeepAspectRatioByExpanding,
-                Qt.TransformationMode.SmoothTransformation)
-            avatar_btn.setIcon(QIcon(pixmap))
-            avatar_btn.setIconSize(QSize(60,60))
-        avatar_btn.clicked.connect(self._ouvrir_profil_dialog())
+            pixmap = pixmap.scaled(64, 64, Qt.AspectRatioMode.KeepAspectRatioByExpanding, Qt.TransformationMode.SmoothTransformation)
+            avatar_label.setPixmap(pixmap)
+            avatar_label.setScaledContents(True)
 
-        # Nom
+        # Noms
         nom_label = QLabel(f"{Session.utilisateur_prenom}")
         nom_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         nom_label.setStyleSheet(f"color: {TEXTE_PRINCIPAL}; font-size: 13px; font-weight: bold;")
 
-        layout.addWidget(avatar_btn, alignment=Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(avatar_label, alignment=Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(nom_label)
 
         return frame
@@ -188,7 +188,6 @@ class MainWindow(QMainWindow):
         topbar.setStyleSheet(f"""
             QFrame {{
                 background-color: {FOND_SECONDAIRE};
-                border-bottom: 1px solid {BORDURE};
             }}
         """)
 

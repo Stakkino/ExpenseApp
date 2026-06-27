@@ -17,7 +17,7 @@ class ProfilDialog(QDialog):
 
     def _configurer_fenetre(self):
         self.setWindowTitle("Expense Application")
-        self.setFixedSize(380, 550) 
+        self.setFixedSize(380, 500) 
         self.setStyleSheet(f"background-color: {FOND_SECONDAIRE};")
 
     def _construire_ui(self):
@@ -29,25 +29,6 @@ class ProfilDialog(QDialog):
         titre = QLabel("Modification Info")
         titre.setStyleSheet(f"color: {TEXTE_PRINCIPAL}; font-size: 16px; font-weight: bold;")
         layout.addWidget(titre)
-
-        # ── CHANGER AVATAR (Selector) ──
-        layout.addWidget(self._creer_label("Choisir un Avatar"))
-        self.combo_avatar = QComboBox()
-        self.combo_avatar.setStyleSheet(self._style_input())
-        
-        dossier_avatar = "assets/avatars"
-        if os.path.exists(dossier_avatar):
-            for fichier in os.listdir(dossier_avatar):
-                if fichier.lower().endswith(('.png', '.jpg', '.jpeg')):
-                    chemin_feno = os.path.join(dossier_avatar, fichier)
-                    self.combo_avatar.addItem(QIcon(chemin_feno), fichier, chemin_feno)
-        
-        avatar_anketriny = DB_CONFIG.get("avatar", "young-man.png").split("/")[-1]
-        index = self.combo_avatar.findText(avatar_anketriny)
-        if index >= 0:
-            self.combo_avatar.setCurrentIndex(index)
-            
-        layout.addWidget(self.combo_avatar)
 
         # ── Champ Nom ──
         layout.addWidget(self._creer_label("Nom"))
@@ -141,7 +122,7 @@ class ProfilDialog(QDialog):
         prenom        = self.input_prenom.text().strip()
         email         = self.input_email.text().strip()
         datenaissance = self.input_datenaissance.date().toString("yyyy-MM-dd")
-        chemin_avatar = self.combo_avatar.currentData()
+        
 
         if not nom or not email:
             QMessageBox.warning(self, "Champ vide", "Veuillez saisir votre Nom ou votre Email.")
@@ -155,8 +136,6 @@ class ProfilDialog(QDialog):
             Session.utilisateur_email = email
             Session.utilisateur_datenaissance = datenaissance
             
-            if chemin_avatar:
-                DB_CONFIG["avatar"] = chemin_avatar
             QMessageBox.information(self, "Succès", "Modifié avec succès.")
             self.accept() 
         else:
