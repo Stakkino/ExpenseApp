@@ -1,39 +1,81 @@
-# import os
-# from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QComboBox, QDateEdit, QPushButton, QMessageBox
-# from PyQt6.QtCore import Qt, QDate
-# from PyQt6.QtGui import QIcon
-
-# from database import modification_info
-# from utils.constants import *
-# from session import Session
-# from config import DB_CONFIG 
+import os
+from PyQt6.QtWidgets import QDialog,QVBoxLayout,QLabel,QListWidget,QListWidgetItem,QPushButton,QHBoxLayout,QMessageBox
+from PyQt6.QtGui import QIcon,QPixmap
+from PyQt6.QtCore import Qt, QSize
 
 
 
+class AvatarChangeDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.avatar_selectionne = None
+        self.setWindowTitle("Changer Avatar")
+        self.setFixedSize(420, 500)
+        self.construire_ui()
 
-# # ── CHANGER AVATAR (Selector) ──
-#         layout.addWidget(self._creer_label("Choisir un Avatar"))
-#         self.combo_avatar = QComboBox()
-#         self.combo_avatar.setStyleSheet(self._style_input())
-        
-#         dossier_avatar = "assets/avatars"
-#         if os.path.exists(dossier_avatar):
-#             for fichier in os.listdir(dossier_avatar):
-#                 if fichier.lower().endswith(('.png', '.jpg', '.jpeg')):
-#                     chemin_feno = os.path.join(dossier_avatar, fichier)
-#                     self.combo_avatar.addItem(QIcon(chemin_feno), fichier, chemin_feno)
-        
-#         avatar_anketriny = DB_CONFIG.get("avatar", "young-man.png").split("/")[-1]
-#         index = self.combo_avatar.findText(avatar_anketriny)
-#         if index >= 0:
-#             self.combo_avatar.setCurrentIndex(index)
-            
-#         layout.addWidget(self.combo_avatar)
+    def construire_ui(self):
+        layout = QVBoxLayout(self)
+        titre = QLabel("Choisissez votre avatar")
+        titre.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        titre.setStyleSheet("""
+            font-size:18px;
+            font-weight:bold;
+        """)
+
+        layout.addWidget(titre)
+
+        self.liste = QListWidget()
+        self.liste.setIconSize(QSize(80,80))
+        self.liste.setViewMode(QListWidget.ViewMode.IconMode)
+        self.liste.setResizeMode(QListWidget.ResizeMode.Adjust)
+        self.liste.setMovement(QListWidget.Movement.Static)
+        self.liste.setSpacing(15)
+
+        layout.addWidget(self.liste)
+
+        self.charger_avatars()
+
+        boutons = QHBoxLayout()
+        btn_annuler = QPushButton("Annuler")
+        btn_ok = QPushButton("Enregistrer")
+
+        btn_annuler.clicked.connect(self.reject)
+        btn_ok.clicked.connect(self.enregistrer)
+
+        boutons.addWidget(btn_annuler)
+        boutons.addWidget(btn_ok)
+
+        layout.addLayout(boutons)
 
 
+    def charger_avatars(self):
+        dossier = "assets/avatars"
+        if not os.path.exists(dossier):
+            return
+        extensions = (".png", ".jpg", ".jpeg")
+        for fichier in sorted(os.listdir(dossier)):
+            if fichier.lower().endswith(extensions):
+                chemin = os.path.join(dossier, fichier)
+                item = QListWidgetItem()
+                item.setIcon(QIcon(chemin))
+                item.setText(os.path.splitext(fichier)[0])
+                item.setData( Qt.ItemDataRole.UserRole, chemin)
 
+                self.liste.addItem(item)
 
+    def enregistrer(self):
+        item = self.liste.currentItem()
+        if item is None:
+            QMessageBox.warning(
+                self,
+                "Avatar",
+                "Veuillez choisir un avatar."
+            )
+            return
 
-# chemin_avatar = self.combo_avatar.currentData()
-# if chemin_avatar:
-#                 DB_CONFIG["avatar"] = chemin_avatar
+        self.avatar_selectionne = item.data(Qt.ItemDataRole.UserRole)
+
+        self.accept()
+
+    def avatar(self):
+        return self.avatar_selectionne
