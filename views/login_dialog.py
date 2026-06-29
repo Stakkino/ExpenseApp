@@ -3,6 +3,7 @@ from PyQt6.QtCore import Qt
 from session import Session
 from database import verifier_utilisateur
 from database.connection import DBConnection
+from utils.avatar_manager import lire_avatar
 from utils.constants import *
 import bcrypt
 
@@ -102,6 +103,7 @@ class LoginDialog(QDialog):
 
         if utilisateur:
             Session.connecter(utilisateur[0:5])
+            Session.avatar = lire_avatar(Session.utilisateur_email)
             #QMessageBox.information(self, "Succès", f"Bienvenu, Tongasoa {Session.utilisateur_prenom} !")
             self.accept()
         else:

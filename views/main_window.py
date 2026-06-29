@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QStackedWidget,QFrame
 from PyQt6.QtGui import QIcon, QPixmap
-from PyQt6.QtCore import Qt, QSize, QPoint
+from PyQt6.QtCore import Qt, QSize, QPoint, pyqtSignal
 
 from views.dashboard_widget import DashboardWidget
 #from views.table_widget import TableWidget
@@ -8,10 +8,18 @@ from views.depense_dialog import DepenseDialog
 from views.recette_dialog import RecetteDialog
 from views.economie_dialog import EconomieDialog
 from views.profil_dialog import ProfilDialog
+from views.avatars_dialog import AvatarChangeDialog
+from views.avatar_viewer_dialog import AvatarViewerDialog
+from utils import enregistrer_avatar
 from utils.constants import *
 from session import Session
 from config import DB_CONFIG
 
+class ClickableAvatar(QLabel):
+    clicked = pyqtSignal()
+    def mousePressEvent(self, event):
+        self.clicked.emit()
+        super().mousePressEvent(event)
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -112,25 +120,38 @@ class MainWindow(QMainWindow):
         layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         
-        avatar_label = QLabel()
-        avatar_label.setFixedSize(64, 64)
-        avatar_label.setStyleSheet("border-radius:32px; border:2px solid #3D9BE9;")
+        self.avatar_label = ClickableAvatar()
+        self.avatar_label.clicked.connect(self.ouvrir_avatar_change)
+        self.avatar_label.setFixedSize(64, 64)
+        self.avatar_label.setStyleSheet("border-radius:32px; border:2px solid #3D9BE9;")
 
-        pixmap = QPixmap(DB_CONFIG.get("avatar", "assets/avatars/family.png"))
+        pixmap = QPixmap(Session.avatar)
         if not pixmap.isNull():
             pixmap = pixmap.scaled(64, 64, Qt.AspectRatioMode.KeepAspectRatioByExpanding, Qt.TransformationMode.SmoothTransformation)
-            avatar_label.setPixmap(pixmap)
-            avatar_label.setScaledContents(True)
+            self.avatar_label.setPixmap(pixmap)
+            self.avatar_label.setScaledContents(True)
 
         # Noms
         nom_label = QLabel(f"{Session.utilisateur_prenom}")
         nom_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         nom_label.setStyleSheet(f"color: {TEXTE_PRINCIPAL}; font-size: 13px; font-weight: bold;")
 
-        layout.addWidget(avatar_label, alignment=Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.avatar_label, alignment=Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(nom_label)
 
         return frame
+
+    def refresh_avatar(self):
+        pixmap = QPixmap(Session.avatar)
+        if pixmap.isNull():
+            return
+        pixmap = pixmap.scaled(64,64,Qt.AspectRatioMode.KeepAspectRatioByExpanding,Qt.TransformationMode.SmoothTransformation)
+        self.avatar_label.setPixmap(pixmap)
+        self.avatar_label.setScaledContents(True)
+
+    def ouvrir_avatar_change(self):
+        dialog = AvatarViewerDialog(self)
+        dialog.exec()
 
     
     def _creer_nav_bouton(self, texte: str, icone_path: str, index: int):
