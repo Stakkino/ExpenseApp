@@ -4,6 +4,7 @@ class Session:
     utilisateur_prenom = None
     utilisateur_email = None
     utilisateur_datenaissance = None
+    avatar = "assets/avatars/family.png" 
 
     @classmethod
     def connecter(cls, utilisateur):
@@ -20,6 +21,7 @@ class Session:
         cls.utilisateur_prenom = None
         cls.utilisateur_email = None
         cls.utilisateur_datenaissance = None
+        cls.avatar = "assets/avatars/family.png"
 
     @classmethod
     def est_connecte(cls):
