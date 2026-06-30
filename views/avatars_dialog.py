@@ -2,14 +2,15 @@ import os
 from PyQt6.QtWidgets import QDialog,QVBoxLayout,QLabel,QListWidget,QListWidgetItem,QPushButton,QHBoxLayout,QMessageBox
 from PyQt6.QtGui import QIcon,QPixmap
 from PyQt6.QtCore import Qt, QSize
+from utils.constants import *
 
 
 class AvatarChangeDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.avatar_selectionne = None
-        self.setWindowTitle("Changer Avatar")
-        self.setFixedSize(420, 500)
+        self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
+        self.setFixedSize(480, 500)
         self.construire_ui()
 
     def construire_ui(self):
@@ -34,17 +35,31 @@ class AvatarChangeDialog(QDialog):
 
         self.charger_avatars()
 
-        boutons = QHBoxLayout()
+        #boutton
+        boutons_layout = QHBoxLayout()
         btn_annuler = QPushButton("Annuler")
-        btn_ok = QPushButton("Enregistrer")
+        btn_annuler.setStyleSheet(self._style_bouton(FOND_INPUT, TEXTE_SECONDAIRE))
+        btn_annuler.clicked.connect(self.reject) 
 
-        btn_annuler.clicked.connect(self.reject)
-        btn_ok.clicked.connect(self.enregistrer)
+        btn_enregstr = QPushButton("Enregistrer")
+        btn_enregstr.clicked.connect(self.enregistrer)
 
-        boutons.addWidget(btn_annuler)
-        boutons.addWidget(btn_ok)
-
-        layout.addLayout(boutons)
+        boutons_layout.addWidget(btn_annuler)
+        boutons_layout.addWidget(btn_enregstr)
+        layout.addLayout(boutons_layout)
+        
+    def _style_bouton(self, bg: str, color: str) -> str:
+        return f"""
+            QPushButton {{
+                background-color: {bg};
+                color: {color};
+                border: none;
+                border-radius: 6px;
+                padding: 10px;
+                font-size: 13px;
+                font-weight: bold;
+            }}
+        """
 
 
     def charger_avatars(self):

@@ -1,8 +1,9 @@
-from PyQt6.QtWidgets import QDialog,QLabel,QPushButton,QVBoxLayout
+from PyQt6.QtWidgets import QDialog,QLabel,QPushButton,QVBoxLayout,QHBoxLayout
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 
 from session import Session
+from utils.constants import *
 from views.avatars_dialog import AvatarChangeDialog
 from utils.avatar_manager import enregistrer_avatar
 
@@ -11,11 +12,11 @@ class AvatarViewerDialog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.parent_window = parent
-        self.setWindowTitle("Mon Profil")
+        self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         self.setFixedSize(320,420)
         self.setStyleSheet("""
             QDialog{
-                background:white;
+                background:"#1A2634";
                 border-radius:10px;
             }
 
@@ -60,9 +61,31 @@ class AvatarViewerDialog(QDialog):
         layout.addWidget(email)
         layout.addSpacing(15)
 
-        btn = QPushButton("Changer Avatar")
-        btn.clicked.connect(self.changer_avatar)
-        layout.addWidget(btn)
+        #Boutton
+        boutons_layout = QHBoxLayout()
+        btn_annuler = QPushButton("Annuler")
+        btn_annuler.setStyleSheet(self._style_bouton(FOND_INPUT, TEXTE_SECONDAIRE))
+        btn_annuler.clicked.connect(self.reject) 
+
+        btn_CA = QPushButton("Changer Avatar")
+        btn_CA.clicked.connect(self.changer_avatar)
+
+        boutons_layout.addWidget(btn_annuler)
+        boutons_layout.addWidget(btn_CA)
+        layout.addLayout(boutons_layout)
+
+    def _style_bouton(self, bg: str, color: str) -> str:
+        return f"""
+            QPushButton {{
+                background-color: {bg};
+                color: {color};
+                border: none;
+                border-radius: 6px;
+                padding: 10px;
+                font-size: 13px;
+                font-weight: bold;
+            }}
+        """
 
 
     def changer_avatar(self):
