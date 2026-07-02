@@ -1,6 +1,6 @@
 import os
 from PyQt6.QtWidgets import QDialog,QVBoxLayout,QLabel,QListWidget,QListWidgetItem,QPushButton,QHBoxLayout,QMessageBox
-from PyQt6.QtGui import QIcon,QPixmap
+from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import Qt, QSize
 from utils.constants import *
 

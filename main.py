@@ -1,13 +1,12 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QDialog, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QWidget
-from PyQt6.QtGui import QPixmap, QIcon
-from PyQt6.QtCore import Qt, QSize, QPoint
+from PyQt6.QtGui import QPixmap
+from PyQt6.QtCore import Qt, QPoint
 
 from views.main_window import MainWindow
 from views.login_dialog import LoginDialog      
 from views.incription_dialog import InscriptionDialog 
 from utils.constants import *
-from database import DBConnection
 
 class WelcomeWindow(QWidget):
     def __init__(self):
@@ -35,13 +34,12 @@ class WelcomeWindow(QWidget):
         layout_principal.setSpacing(20)
 
         top_bar = QHBoxLayout()
-        top_bar.addStretch()
+        top_bar.setAlignment(Qt.AlignmentFlag.AlignLeft)
         btn_close = QPushButton()
         btn_close.setFixedSize(12, 12)
         btn_close.setStyleSheet("""
-            QPushButton { background-color: #374151; border: none; border-radius: 6px; }
-            QPushButton:hover { background-color: #ff5f56; }
-        """)
+            QPushButton { background-color: #ff5f56; border: none; border-radius: 6px; }
+            """)
         btn_close.clicked.connect(self.close)
         top_bar.addWidget(btn_close)
         layout_principal.addLayout(top_bar)

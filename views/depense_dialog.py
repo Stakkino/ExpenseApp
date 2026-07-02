@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel,QLineEdit, QComboBox, QDateTimeEdit, QPushButton,QMessageBox
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel,QLineEdit, QComboBox, QPushButton,QMessageBox
 from PyQt6.QtCore import Qt
 from decimal import Decimal, InvalidOperation
 from database import ajoutdepense, get_solde_dispo

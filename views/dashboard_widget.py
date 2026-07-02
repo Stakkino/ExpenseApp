@@ -1,5 +1,5 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QFrame, QLabel, QSizePolicy
-from PyQt6.QtGui import QFont, QPixmap
+from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 
 from database import (get_solde, get_total_depense, get_total_economie, get_solde_dispo)
