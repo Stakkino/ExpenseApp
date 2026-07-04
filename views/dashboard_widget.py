@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QFrame, QLabel, Q
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 
-from database import (get_solde, get_total_depense, get_total_economie, get_solde_dispo)
+from database import *
 from utils.formatters import format_montant
 from utils.constants import *
 

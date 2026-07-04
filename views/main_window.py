@@ -3,7 +3,7 @@ from PyQt6.QtGui import QIcon, QPixmap, QAction
 from PyQt6.QtCore import Qt, QSize, QPoint, pyqtSignal
 
 from views.dashboard_widget import DashboardWidget
-#from views.table_widget import TableWidget
+from views.table_widget import TableWidget
 from views.depense_dialog import DepenseDialog
 from views.recette_dialog import RecetteDialog
 from views.economie_dialog import EconomieDialog

@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel,QLineEdit,
 from PyQt6.QtCore import Qt
 from decimal import Decimal, InvalidOperation
 
-from database import ajoutrecette
+from database import *
 from utils.constants import *
 
 

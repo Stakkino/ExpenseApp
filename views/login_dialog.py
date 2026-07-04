@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel,QLineEdit, QPushButton,QMessageBox
 from PyQt6.QtCore import Qt
 from session import Session
-from database import verifier_utilisateur
+from database import *
 from utils.avatar_manager import lire_avatar
 from utils.constants import *
 

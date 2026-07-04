@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel,QLineEdit, QDateEdit, QPushButton,QMessageBox
 from PyQt6.QtCore import Qt, QDate
 
-from database import incription
+from database import *
 from utils.constants import *
 
 
