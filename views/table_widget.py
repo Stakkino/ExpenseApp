@@ -1,30 +1,40 @@
 from PyQt6.QtWidgets import QTableWidgetItem
-from database import get_all_recette
 
-def charger_table_recette(self):
+from database.queries import get_all_recette, get_all_depense, get_all_economie
 
+
+
+#==========================
+# RECETTES
+#==========================
+def charger_table_recette(table):
     donnees = get_all_recette()
-
-    self.tableRecette.setRowCount(len(donnees))
-
+    table.clearContents()
+    table.setRowCount(len(donnees))
     for ligne, recette in enumerate(donnees):
+        for colonne, valeur in enumerate(recette):
+            table.setItem(ligne, colonne, QTableWidgetItem(str(valeur)))
 
-        self.tableRecette.setItem(
-            ligne, 0,
-            QTableWidgetItem(str(recette[0]))
-        )
 
-        self.tableRecette.setItem(
-            ligne, 1,
-            QTableWidgetItem(str(recette[1]))
-        )
+#==========================
+# DEPENSES
+#==========================
+def charger_table_depense(table):
+    donnees = get_all_depense()
+    table.clearContents()
+    table.setRowCount(len(donnees))
+    for ligne, depense in enumerate(donnees):
+        for colonne, valeur in enumerate(depense):
+            table.setItem(ligne, colonne, QTableWidgetItem(str(valeur)))
 
-        self.tableRecette.setItem(
-            ligne, 2,
-            QTableWidgetItem(str(recette[2]))
-        )
 
-        self.tableRecette.setItem(
-            ligne, 3,
-            QTableWidgetItem(str(recette[3]))
-        )
+#==========================
+# ECONOMIES
+#==========================
+def charger_table_economie(table):
+    donnees = get_all_economie()
+    table.clearContents()
+    table.setRowCount(len(donnees))
+    for ligne, economie in enumerate(donnees):
+        for colonne, valeur in enumerate(economie):
+            table.setItem(ligne,colonne,QTableWidgetItem(str(valeur)))

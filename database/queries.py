@@ -218,53 +218,79 @@ def actionconomie(types: str, montante: Decimal, descriptions: str) -> bool:
 #-------------------LES METHODES LISTEs---------------
 #-----------------------------------------------------
 #-----------------------RECETTE-----------------------
-def get_all_recette() -> list:
+def get_all_recette(date_debut=None, date_fin=None) -> list:
     sql = """
         SELECT id, montantr, descriptions, dater
         FROM Recette
         WHERE utilisateur = %s
-        ORDER BY dater DESC
-    """
-    try :
+        """
+    param = [Session.utilisateur_id]
+    if date_debut is not None:
+        sql += " AND dater >= %s"
+        param.append(date_debut)
+    if date_fin is not None:
+        sql += " AND dater <= %s"
+        param.append(date_fin)
+    sql += " ORDER BY dater DESC"
+    try:
         with DBConnection() as conx:
             curseur = conx.cursor()
-            curseur.execute(sql, (Session.utilisateur_id))
+            curseur.execute(sql, tuple(param))
             return curseur.fetchall()
+
     except Exception as e:
         print(f"Erreur des listes de Recette : {e}")
         return []
+    
 
 #-----------------------DEPENSE------------------------
-def get_all_depense() -> list:
+def get_all_depense(date_debut=None, date_fin=None) -> list:
     sql = """
         SELECT d.id, c.nom, d.descriptions, d.montantd, d.dated
         FROM Depense d
         JOIN Categorie c ON d.categorie = c.id
-        WHERE utilisateur = %s
-        ORDER BY d.dated DESC
+        WHERE d.utilisateur = %s
         """
-    try :
+    param = [Session.utilisateur_id]
+    if date_debut is not None:
+        sql += " AND d.dated >= %s"
+        param.append(date_debut)
+    if date_fin is not None:
+        sql += " AND d.dated <= %s"
+        param.append(date_fin)
+    sql += " ORDER BY d.dated DESC"
+    try:
         with DBConnection() as conx:
             curseur = conx.cursor()
-            curseur.execute(sql, (Session.utilisateur_id))
+            curseur.execute(sql, tuple(param))
             return curseur.fetchall()
+
     except Exception as e:
         print(f"Erreur des listes de Depense : {e}")
         return []
+    
 
 #---------------------ECONOMIE--------------------
-def get_all_economie() -> list:
+def get_all_economie(date_debut=None, date_fin=None) -> list:
     sql = """
         SELECT id, types, montante, descriptions, datee
         FROM Economie
         WHERE utilisateur = %s
-        ORDER BY datee DESC
         """
-    try :
+    param = [Session.utilisateur_id]
+    if date_debut is not None:
+        sql += " AND datee >= %s"
+        param.append(date_debut)
+    if date_fin is not None:
+        sql += " AND datee <= %s"
+        param.append(date_fin)
+    sql += " ORDER BY datee DESC"
+    try:
         with DBConnection() as conx:
             curseur = conx.cursor()
-            curseur.execute(sql, (Session.utilisateur_id))
+            curseur.execute(sql, tuple(param))
             return curseur.fetchall()
+
     except Exception as e:
         print(f"Erreur des listes d'Economie : {e}")
         return []
