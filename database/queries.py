@@ -225,10 +225,13 @@ def get_all_recette(date_debut=None, date_fin=None) -> list:
         WHERE utilisateur = %s
         """
     param = [Session.utilisateur_id]
-    if date_debut is not None:
+    if date_debut is not None and date_fin is not None:
+        sql += " AND dater BETWEEN %s AND %s"
+        param.extend([date_debut, date_fin])
+    elif date_debut is not None:
         sql += " AND dater >= %s"
         param.append(date_debut)
-    if date_fin is not None:
+    elif date_fin is not None:
         sql += " AND dater <= %s"
         param.append(date_fin)
     sql += " ORDER BY dater DESC"
@@ -252,10 +255,13 @@ def get_all_depense(date_debut=None, date_fin=None) -> list:
         WHERE d.utilisateur = %s
         """
     param = [Session.utilisateur_id]
-    if date_debut is not None:
+    if date_debut is not None and date_fin is not None:
+        sql += " AND d.dated BETWEEN %s AND %s"
+        param.extend([date_debut, date_fin])
+    elif date_debut is not None:
         sql += " AND d.dated >= %s"
         param.append(date_debut)
-    if date_fin is not None:
+    elif date_fin is not None:
         sql += " AND d.dated <= %s"
         param.append(date_fin)
     sql += " ORDER BY d.dated DESC"
