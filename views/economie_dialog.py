@@ -47,14 +47,14 @@ class EconomieDialog(QDialog):
         # ── Champ Montant ──
         layout.addWidget(self._creer_label("Montant (Ar)"))
         self.input_montant = QLineEdit()
-        self.input_montant.setPlaceholderText("Ex: 15000")
+        self.input_montant.setPlaceholderText("Ex: 5000")
         self.input_montant.setStyleSheet(self._style_input())
         layout.addWidget(self.input_montant)
 
         # ── Champ Description ──
         layout.addWidget(self._creer_label("Description"))
         self.input_description = QLineEdit()
-        self.input_description.setPlaceholderText("Ex: Riz et légumes")
+        self.input_description.setPlaceholderText("Ex: Projet Vacance")
         self.input_description.setStyleSheet(self._style_input())
         layout.addWidget(self.input_description)
 

@@ -63,7 +63,48 @@ class ProfilDialog(QDialog):
         self.input_datenaissance.setCalendarPopup(True)
         self.input_datenaissance.setDisplayFormat("dd/MM/yyyy")
         self.input_datenaissance.setDate(daty_session)
-        self.input_datenaissance.setStyleSheet(self._style_input())
+        self.input_datenaissance.setStyleSheet(f"""
+            QDateEdit {{
+                background-color: {FOND_INPUT};
+                color: {TEXTE_PRINCIPAL};
+                border: 1px solid {BORDURE};
+                border-radius: 6px;
+                padding: 8px;
+                font-size: 13px;
+            }}
+
+            QCalendarWidget {{
+                background-color: {FOND_INPUT};
+                color: {TEXTE_PRINCIPAL};
+                border: 1px solid {BORDURE};
+                border-radius: 8px;
+            }}
+
+            QCalendarWidget QToolButton {{
+                color: {TEXTE_PRINCIPAL};
+                background-color: transparent;
+                font-size: 13px;
+                font-weight: bold;
+                height: 30px;
+            }}
+
+            QCalendarWidget QMenu {{
+                background-color: {FOND_INPUT};
+                color: {TEXTE_PRINCIPAL};
+            }}
+
+            QCalendarWidget QAbstractItemView {{
+                background-color: {FOND_INPUT};
+                color: {TEXTE_PRINCIPAL};
+                selection-background-color: {BLEU_ECONOMIE};
+                selection-color: white;
+                border-radius: 6px;
+            }}
+
+            QCalendarWidget QAbstractItemView:disabled {{
+                color: #777777;
+            }}
+        """)
         layout.addWidget(self.input_datenaissance)
         
         self.label_info = QLabel("Réservé aux personnes de 7 ans et plus")

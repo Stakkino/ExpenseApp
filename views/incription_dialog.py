@@ -57,7 +57,43 @@ class InscriptionDialog(QDialog):
         self.input_datenaissance.setDisplayFormat("dd/MM/yyyy")
         self.input_datenaissance.setMaximumDate(maxidate)
         self.input_datenaissance.setDate(maxidate)
-        self.input_datenaissance.setStyleSheet(self._style_input())
+        self.input_datenaissance.setStyleSheet(f"""
+            QDateEdit {{
+                background-color: {FOND_INPUT};
+                color: {TEXTE_PRINCIPAL};
+                border: 1px solid {BORDURE};
+                border-radius: 6px;
+                padding: 8px;
+                font-size: 13px;
+            }}
+            QCalendarWidget {{
+                background-color: {FOND_INPUT};
+                color: {TEXTE_PRINCIPAL};
+                border: 1px solid {BORDURE};
+                border-radius: 8px;
+            }}
+            QCalendarWidget QToolButton {{
+                color: {TEXTE_PRINCIPAL};
+                background-color: transparent;
+                font-size: 13px;
+                font-weight: bold;
+                height: 30px;
+            }}
+            QCalendarWidget QMenu {{
+                background-color: {FOND_INPUT};
+                color: {TEXTE_PRINCIPAL};
+            }}
+            QCalendarWidget QAbstractItemView {{
+                background-color: {FOND_INPUT};
+                color: {TEXTE_PRINCIPAL};
+                selection-background-color: {BLEU_ECONOMIE};
+                selection-color: white;
+                border-radius: 6px;
+            }}
+            QCalendarWidget QAbstractItemView:disabled {{
+                color: #777777;
+            }}
+        """)
         layout.addWidget(self.input_datenaissance)
         self.label_info = QLabel("Réservé aux personnes de 7 ans et plus")
         self.label_info.setStyleSheet(f"font-size:11px; color:{TEXTE_LABEL}; margin-top:-2px; margin-bottom:10px")

@@ -21,51 +21,91 @@ class TableWidget(QWidget):
         layout.setContentsMargins(24,24,24,24)
         layout.setSpacing(18)
 
-        ligne_bouton = QHBoxLayout()
-        self.btnRecette = QPushButton("Recettes")
-        self.btnDepense = QPushButton("Dépenses")
-        self.btnEconomie = QPushButton("Économies")
-
-        for bouton in (self.btnRecette,self.btnDepense,self.btnEconomie):
-            bouton.setCursor(Qt.CursorShape.PointingHandCursor)
-            bouton.setFixedHeight(38)
-            bouton.setStyleSheet(f"""
-                QPushButton{{
-                    background:{BLEU_ECONOMIE};
-                    color:white;
-                    border:none;
-                    border-radius:8px;
-                    font-weight:bold;
-                }}
-                QPushButton:hover{{
-                    background:#2980B9;
-                }}
-                """)
-            ligne_bouton.addWidget(bouton)
-        ligne_bouton.addStretch()
-        layout.addLayout(ligne_bouton)
-
+        # ================= FILTRE =================
         ligne_filtre = QHBoxLayout()
+        ligne_filtre.setSpacing(12)
+        style_label = f""" QLabel {{color:{TEXTE_PRINCIPAL};font-size:12px;font-weight:bold;}}"""
         lbl1 = QLabel("Date début")
+        lbl1.setStyleSheet(style_label)
         self.dateDebut = QDateEdit()
         self.dateDebut.setCalendarPopup(True)
         self.dateDebut.setDate(QDate.currentDate().addMonths(-1))
+
         lbl2 = QLabel("Date fin")
+        lbl2.setStyleSheet(style_label)
         self.dateFin = QDateEdit()
         self.dateFin.setCalendarPopup(True)
         self.dateFin.setDate(QDate.currentDate())
-        self.btnFiltrer = QPushButton("Filtrer")
-        self.btnReset = QPushButton("Réinitialiser")
 
-        for widget in (self.btnFiltrer, self.btnReset):
+        style_date = f"""
+            QDateEdit {{
+                background:{FOND_INPUT};
+                color:{TEXTE_PRINCIPAL};
+                border:1px solid {BORDURE};
+                border-radius:8px;
+                padding:6px 10px;
+                font-size:12px;
+            }}
+            QDateEdit:hover {{
+                    border:1px solid {ACCENT_PRIMAIRE};
+                }}
+            QDateEdit::drop-down {{
+                    border:none;
+                }}
+        """
+        self.dateDebut.setStyleSheet(style_date)
+        self.dateFin.setStyleSheet(style_date)
+
+        # Bouton Filtrer
+        self.btnFiltrer = QPushButton("Filtrer")
+        self.btnFiltrer.setStyleSheet(f"""
+            QPushButton {{
+                background:{ACCENT_PRIMAIRE};
+                color:white;
+                border:none;
+                border-radius:8px;
+                padding:8px 22px;
+                font-size:12px;
+                font-weight:bold;
+            }}
+            QPushButton:hover {{
+                background:{ACCENT_HOVER};
+            }}
+            QPushButton:pressed {{
+                background:{ACCENT_PRESSED};
+            }}
+        """)
+
+        # Bouton Reset
+        self.btnReset = QPushButton("Réinitialiser")
+        self.btnReset.setStyleSheet(f"""
+            QPushButton {{
+                background:{FOND_CARTE};
+                color:{TEXTE_PRINCIPAL};
+                border:1px solid {BORDURE};
+                border-radius:8px;
+                padding:8px 18px;
+                font-size:12px;
+                font-weight:bold;
+            }}
+            QPushButton:hover {{
+                background:{BORDURE};
+                border:1px solid {ACCENT_PRIMAIRE};
+            }}
+            QPushButton:pressed {{
+                background:{FOND_INPUT};
+            }}
+        """)
+        for widget in (self.btnFiltrer,self.btnReset):
             widget.setCursor(Qt.CursorShape.PointingHandCursor)
-            widget.setFixedHeight(35)
+            widget.setFixedHeight(38)
+
         ligne_filtre.addWidget(lbl1)
         ligne_filtre.addWidget(self.dateDebut)
-        ligne_filtre.addSpacing(20)
+        ligne_filtre.addSpacing(15)
         ligne_filtre.addWidget(lbl2)
         ligne_filtre.addWidget(self.dateFin)
-        ligne_filtre.addSpacing(25)
+        ligne_filtre.addSpacing(20)
         ligne_filtre.addWidget(self.btnFiltrer)
         ligne_filtre.addWidget(self.btnReset)
         ligne_filtre.addStretch()
@@ -81,26 +121,45 @@ class TableWidget(QWidget):
         self.table.horizontalHeader().setStretchLastSection(True)
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.table.setStyleSheet(f"""
-            QTableWidget{{
-                background:white;
-                border-radius:10px;
-                gridline-color:#DDDDDD;
+            QTableWidget {{
+                background:{FOND_SECONDAIRE};
+                alternate-background-color:{FOND_CARTE};
+                color:{TEXTE_PRINCIPAL};
+                border:1px solid {BORDURE};
+                border-radius:12px;
+                gridline-color:{BORDURE};
                 font-size:12px;
+                selection-background-color:{ACCENT_PRIMAIRE};
+                selection-color:white;
             }}
-            QHeaderView::section{{
-                background:{BLEU_ECONOMIE};
+            QTableWidget::item {{
+                padding:8px;
+                border-bottom:1px solid {BORDURE};
+            }}
+            QTableWidget::item:hover {{
+                background:#243B55;
+            }}
+            QHeaderView::section {{
+                background:{ACCENT_PRIMAIRE};
                 color:white;
+                font-size:12px;
                 font-weight:bold;
+                height:38px;
                 border:none;
-                height:34px;
+                padding-left:8px;
             }}
-            """)
+            QScrollBar:vertical {{
+                background:{FOND_PRINCIPAL};
+                width:10px;
+            }}
+            QScrollBar::handle:vertical {{
+                background:{ACCENT_PRIMAIRE};
+                border-radius:5px;
+            }}
+        """)
+        
         layout.addWidget(self.table)
 
-
-        self.btnRecette.clicked.connect(self.charger_table_recette)
-        self.btnDepense.clicked.connect(self.charger_table_depense)
-        self.btnEconomie.clicked.connect(self.charger_table_economie)
         self.btnFiltrer.clicked.connect(self.filtrer)
         self.btnReset.clicked.connect(self.refresh)
 
@@ -108,7 +167,7 @@ class TableWidget(QWidget):
     def charger_table_recette(self):
         self.type_courant = "recette"
         self.table.setColumnCount(4)
-        self.table.setHorizontalHeaderLabels(["ID","Montant","Description","Date"])
+        self.table.setHorizontalHeaderLabels(["ID","Montant","Description","Date et Heure"])
         donnees = get_all_recette()
         self._remplir_table(donnees)
 
@@ -117,7 +176,7 @@ class TableWidget(QWidget):
     def charger_table_depense(self):
         self.type_courant = "depense"
         self.table.setColumnCount(5)
-        self.table.setHorizontalHeaderLabels(["ID","Catégorie","Description","Montant","Date"])
+        self.table.setHorizontalHeaderLabels(["ID","Catégorie","Description","Montant","Date et Heure"])
         donnees = get_all_depense()
         self._remplir_table(donnees)
 
@@ -126,7 +185,7 @@ class TableWidget(QWidget):
     def charger_table_economie(self):
         self.type_courant = "economie"
         self.table.setColumnCount(5)
-        self.table.setHorizontalHeaderLabels(["ID","Type","Montant","Description","Date"])
+        self.table.setHorizontalHeaderLabels(["ID","Type","Montant","Description","Date et Heure"])
         donnees = get_all_economie()
         self._remplir_table(donnees)
 
@@ -134,7 +193,7 @@ class TableWidget(QWidget):
     def charger_table_historique(self):
         self.type_courant = "historique"
         self.table.setColumnCount(4)
-        self.table.setHorizontalHeaderLabels(["Type", "Montant", "Description", "Date"])
+        self.table.setHorizontalHeaderLabels(["Type", "Montant", "Description", "Date et Heure"])
         donnees = get_all_historique()
         self._remplir_table(donnees)
 

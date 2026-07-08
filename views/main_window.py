@@ -325,7 +325,7 @@ class MainWindow(QMainWindow):
     def _ouvrir_recette_dialog(self):
         dialog = RecetteDialog(self)
         if dialog.exec():           
-            self._creer_profil()
+            self.dashboard.refresh()
 
     def _ouvrir_depense_dialog(self):
         dialog = DepenseDialog(self)
