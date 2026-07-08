@@ -12,5 +12,6 @@ from .queries import (
     actionconomie,
     get_all_recette,
     get_all_depense,
-    get_all_economie
+    get_all_economie,
+    get_all_historique
 )
