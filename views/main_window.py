@@ -233,11 +233,20 @@ class MainWindow(QMainWindow):
 
         self.pages = QStackedWidget()
         self.dashboard  = DashboardWidget()
-        self.pages.addWidget(self.dashboard)    # index 0
-        self.pages.addWidget(QWidget())         # index 1 — Recettes
-        self.pages.addWidget(QWidget())         # index 2 — Dépenses
-        self.pages.addWidget(QWidget())         # index 3 — Économies
-        self.pages.addWidget(QWidget())         # index 4 — Historique
+        self.page_recette = TableWidget()
+        self.page_recette.charger_table_recette()
+        self.page_depense = TableWidget()
+        self.page_depense.charger_table_depense()
+        self.page_economie = TableWidget()
+        self.page_economie.charger_table_economie()
+        self.page_historique = TableWidget()
+        self.page_historique.charger_table_historique() 
+
+        self.pages.addWidget(self.dashboard)    
+        self.pages.addWidget(self.page_recette)         
+        self.pages.addWidget(self.page_depense)         
+        self.pages.addWidget(self.page_economie)         
+        self.pages.addWidget(self.page_historique)         
 
         layout.addWidget(self.pages)
         return frame

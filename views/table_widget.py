@@ -14,7 +14,7 @@ class TableWidget(QWidget):
             """)
         self.type_courant = "recette"
         self._construire_ui()
-        self.charger_recette()
+        self.charger_table_recette()
 
     def _construire_ui(self):
         layout = QVBoxLayout(self)
@@ -98,9 +98,9 @@ class TableWidget(QWidget):
         layout.addWidget(self.table)
 
 
-        self.btnRecette.clicked.connect(self.charger_recette)
-        self.btnDepense.clicked.connect(self.charger_depense)
-        self.btnEconomie.clicked.connect(self.charger_economie)
+        self.btnRecette.clicked.connect(self.charger_table_recette)
+        self.btnDepense.clicked.connect(self.charger_table_depense)
+        self.btnEconomie.clicked.connect(self.charger_table_economie)
         self.btnFiltrer.clicked.connect(self.filtrer)
         self.btnReset.clicked.connect(self.refresh)
 
@@ -130,6 +130,14 @@ class TableWidget(QWidget):
         donnees = get_all_economie()
         self._remplir_table(donnees)
 
+    #-----------------------HISTORIQUE------------------------
+    def charger_table_historique(self):
+        self.type_courant = "historique"
+        self.table.setColumnCount(4)
+        self.table.setHorizontalHeaderLabels(["Type", "Montant", "Description", "Date"])
+        donnees = get_all_historique()
+        self._remplir_table(donnees)
+
 
     # FILTRE
     def filtrer(self):
@@ -139,8 +147,10 @@ class TableWidget(QWidget):
             donnees = get_all_recette(date_debut, date_fin)
         elif self.type_courant == "depense":
             donnees = get_all_depense(date_debut, date_fin)
-        else:
+        elif self.type_courant == "economie":
             donnees = get_all_economie(date_debut, date_fin)
+        elif self.type_courant == "historique":
+            donnees = get_all_historique(date_debut, date_fin)
         self._remplir_table(donnees)
 
 
@@ -149,11 +159,13 @@ class TableWidget(QWidget):
         self.dateDebut.setDate(QDate.currentDate().addMonths(-1))
         self.dateFin.setDate(QDate.currentDate())
         if self.type_courant == "recette":
-            self.charger_recette()
+            self.charger_table_recette()
         elif self.type_courant == "depense":
-            self.charger_depense()
-        else:
-            self.charger_economie()
+            self.charger_table_depense()
+        elif self.type_courant == "economie":
+            self.charger_table_economie()
+        elif self.type_courant == "historique":
+            self.charger_table_historique()
 
 
 
