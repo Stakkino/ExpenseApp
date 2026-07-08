@@ -190,7 +190,7 @@ def actionconomie(types: str, montante: Decimal, descriptions: str) -> bool:
             print(f"Solde Dispo est insuffisant : {solde_dispo} Ar")
             return False
     
-    if types == 'Retrait':
+    elif types == 'Retrait':
         solde_economie = get_total_economie()
         if montante > solde_economie:
             print(f"Solde Économie est insuffisant : {solde_economie} Ar")
@@ -299,4 +299,63 @@ def get_all_economie(date_debut=None, date_fin=None) -> list:
 
     except Exception as e:
         print(f"Erreur des listes d'Economie : {e}")
+        return []
+
+#-----------------------HISTORIQUE------------------------
+def get_all_historique(date_debut=None, date_fin=None) -> list:
+
+    sql = """
+        SELECT * FROM (
+            SELECT 'Recette' AS type_action, montantr AS montant, descriptions, dater AS date_action
+            FROM Recette
+            WHERE utilisateur = %s
+
+            UNION ALL
+
+            SELECT 'Dépense' AS type_action, montantd AS montant, descriptions, dated AS date_action
+            FROM Depense
+            WHERE utilisateur = %s
+
+            UNION ALL
+
+            SELECT
+                CASE
+                    WHEN types = 'Ajouter' THEN 'Ajouter (Économie)'
+                    WHEN types = 'Retrait' THEN 'Retrait (Économie)'
+                    ELSE types
+                END AS type_action, montante AS montant, descriptions,datee AS date_action
+            FROM Economie
+            WHERE utilisateur = %s
+        ) historique
+        """
+
+    param = [
+        Session.utilisateur_id,
+        Session.utilisateur_id,
+        Session.utilisateur_id
+    ]
+
+    conditions = []
+
+    if date_debut is not None:
+        conditions.append("date_action >= %s")
+        param.append(date_debut)
+
+    if date_fin is not None:
+        conditions.append("date_action <= %s")
+        param.append(date_fin)
+
+    if conditions:
+        sql += " WHERE " + " AND ".join(conditions)
+
+    sql += " ORDER BY date_action DESC"
+
+    try:
+        with DBConnection() as conx:
+            curseur = conx.cursor()
+            curseur.execute(sql, tuple(param))
+            return curseur.fetchall()
+
+    except Exception as e:
+        print(f"Erreur Historique : {e}")
         return []
