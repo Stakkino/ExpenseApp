@@ -8,4 +8,4 @@ from .login_dialog import LoginDialog
 from .main_window import ClickableAvatar, MainWindow
 from .profil_dialog import ProfilDialog
 from .recette_dialog import RecetteDialog
-from .table_widget import charger_table_recette
+from .table_widget import TableWidget

@@ -105,7 +105,7 @@ class TableWidget(QWidget):
         self.btnReset.clicked.connect(self.refresh)
 
     # RECETTES
-    def charger_recette(self):
+    def charger_table_recette(self):
         self.type_courant = "recette"
         self.table.setColumnCount(4)
         self.table.setHorizontalHeaderLabels(["ID","Montant","Description","Date"])
@@ -114,7 +114,7 @@ class TableWidget(QWidget):
 
 
     # DEPENSES
-    def charger_depense(self):
+    def charger_table_depense(self):
         self.type_courant = "depense"
         self.table.setColumnCount(5)
         self.table.setHorizontalHeaderLabels(["ID","Catégorie","Description","Montant","Date"])
@@ -123,7 +123,7 @@ class TableWidget(QWidget):
 
 
     # ECONOMIES
-    def charger_economie(self):
+    def charger_table_economie(self):
         self.type_courant = "economie"
         self.table.setColumnCount(5)
         self.table.setHorizontalHeaderLabels(["ID","Type","Montant","Description","Date"])
