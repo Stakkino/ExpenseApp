@@ -1,7 +1,7 @@
 from database.connection import DBConnection
 from decimal import Decimal
 from session import Session
-from datetime import date
+from datetime import date, datetime, timedelta
 import bcrypt
 
 
@@ -244,6 +244,30 @@ def get_all_recette(date_debut=None, date_fin=None) -> list:
     except Exception as e:
         print(f"Erreur des listes de Recette : {e}")
         return []
+
+#-------------------RECETTES PAR SEMAINE-------------------
+def get_recettes_semaine():
+    sql = """
+        SELECT DAYOFWEEK(dater), COALESCE(SUM(montantr),0)
+        FROM Recette
+        WHERE utilisateur = %s
+        AND dater >= %s
+        GROUP BY DAYOFWEEK(dater)
+        """
+    try:
+        aujourdhui = datetime.now()
+        debut = aujourdhui - timedelta(days=6)
+        resultat = [0] * 7
+        with DBConnection() as conx:
+            curseur = conx.cursor()
+            curseur.execute(sql, (Session.utilisateur_id, debut))
+            for jour, total in curseur.fetchall():
+                index = (jour + 5) % 7
+                resultat[index] = float(total)
+        return resultat
+    except Exception as e:
+        print(f"Erreur DB : {e}")
+        return [0] * 7
     
 
 #-----------------------DEPENSE------------------------
@@ -274,7 +298,32 @@ def get_all_depense(date_debut=None, date_fin=None) -> list:
     except Exception as e:
         print(f"Erreur des listes de Depense : {e}")
         return []
-    
+
+
+#-------------------DEPENSES PAR SEMAINE-------------------
+def get_depenses_semaine():
+    sql = """
+        SELECT DAYOFWEEK(dated), COALESCE(SUM(montantd),0)
+        FROM Depense
+        WHERE utilisateur = %s
+        AND dated >= %s
+        GROUP BY DAYOFWEEK(dated)
+        """
+    try:
+        aujourdhui = datetime.now()
+        debut = aujourdhui - timedelta(days=6)
+        resultat = [0] * 7
+        with DBConnection() as conx:
+            curseur = conx.cursor()
+            curseur.execute(sql, (Session.utilisateur_id, debut))
+            for jour, total in curseur.fetchall():
+                index = (jour + 5) % 7
+                resultat[index] = float(total)
+        return resultat
+    except Exception as e:
+        print(f"Erreur DB : {e}")
+        return [0] * 7
+
 
 #---------------------ECONOMIE--------------------
 def get_all_economie(date_debut=None, date_fin=None) -> list:
