@@ -385,26 +385,41 @@ def get_all_historique(date_debut=None, date_fin=None) -> list:
     ]
 
     conditions = []
-
     if date_debut is not None:
         conditions.append("date_action >= %s")
         param.append(date_debut)
-
     if date_fin is not None:
         conditions.append("date_action <= %s")
         param.append(date_fin)
-
     if conditions:
         sql += " WHERE " + " AND ".join(conditions)
-
     sql += " ORDER BY date_action DESC"
-
     try:
         with DBConnection() as conx:
             curseur = conx.cursor()
             curseur.execute(sql, tuple(param))
             return curseur.fetchall()
-
     except Exception as e:
         print(f"Erreur Historique : {e}")
+        return []
+    
+
+
+#----------------------transaction-----------------------
+def get_transactions_recentes():
+    sql = """
+        SELECT 'Recette' as type, montantr as montant, descriptions, dater as date_trans
+        FROM Recette WHERE utilisateur = %s
+        UNION ALL
+        SELECT 'Depense' as type, -montantd as montant, descriptions, dated as date_trans
+        FROM Depense WHERE utilisateur = %s
+        ORDER BY date_trans DESC LIMIT 5
+        """
+    try:
+        with DBConnection() as conx:
+            curseur = conx.cursor()
+            curseur.execute(sql, (Session.utilisateur_id, Session.utilisateur_id))
+            return curseur.fetchall()
+    except Exception as e:
+        print(f"Erreur transactions : {e}")
         return []

@@ -11,7 +11,10 @@ from .queries import (
     ajoutdepense,
     actionconomie,
     get_all_recette,
+    get_recettes_semaine,
     get_all_depense,
+    get_depenses_semaine,
     get_all_economie,
-    get_all_historique
+    get_all_historique,
+    get_transactions_recentes
 )
