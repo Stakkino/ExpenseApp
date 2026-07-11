@@ -121,7 +121,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(self._creer_nav_bouton("  Dashboard",  "assets/icons/home.png",     0))
         layout.addWidget(self._creer_nav_bouton("  Recettes",   "assets/icons/recette.png",   1))
         layout.addWidget(self._creer_nav_bouton("  Dépenses",   "assets/icons/depense.png",  2))
-        layout.addWidget(self._creer_nav_bouton("  Économies",  "assets/icons/econimie.png",  3))
+        layout.addWidget(self._creer_nav_bouton("  Économies",  "assets/icons/economie.png",  3))
         layout.addWidget(self._creer_nav_bouton("  Historique", "assets/icons/historique.png",  4))
         layout.addStretch()  
         btn_parametres = self._creer_nav_bouton("  Paramètres", "assets/icons/settings.png", -1)

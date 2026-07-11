@@ -1,5 +1,28 @@
-<!DOCTYPE RCC><RCC version='1.0'>
-<qresource prefix="/">
-
-</qresource>
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="/">
+        <file>assets/avatars/businessman.png</file>
+        <file>assets/avatars/Entreprise.png</file>
+        <file>assets/avatars/family.png</file>
+        <file>assets/avatars/girl.png</file>
+        <file>assets/avatars/mami.png</file>
+        <file>assets/avatars/papi.png</file>
+        <file>assets/avatars/woman.png</file>
+        <file>assets/avatars/young-man.png</file>
+        
+        <file>assets/icons/calendar.png</file>
+        <file>assets/icons/check.png</file>
+        <file>assets/icons/depense.png</file>
+        <file>assets/icons/economie.png</file>
+        <file>assets/icons/historique.png</file>
+        <file>assets/icons/home.png</file>
+        <file>assets/icons/logo3.png</file>
+        <file>assets/icons/plus.png</file>
+        <file>assets/icons/recette.png</file>
+        <file>assets/icons/remove.png</file>
+        <file>assets/icons/sdispo.png</file>
+        <file>assets/icons/settings.png</file>
+        <file>assets/icons/solde.png</file>
+        <file>assets/icons/user.png</file>
+    </qresource>
 </RCC>
