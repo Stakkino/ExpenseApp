@@ -61,7 +61,8 @@ class DashboardWidget(QWidget):
 
         # 2. Graphique
         self.canvas = self._creer_graphique()
-        layout.addWidget(self.canvas)
+        self.graphique_container = self._creer_graphique()
+        layout.addWidget(self.graphique_container) 
 
         # 3. Transactions récentes (Layout container)
         self.trans_container = QVBoxLayout()
@@ -114,8 +115,19 @@ class DashboardWidget(QWidget):
     
 
     def _creer_graphique(self):
-        self.figure, self.canvas, self.ax = creer_figure_graphique()
-        return self.canvas
+        self.figure, self.canvas, self.ax = creer_figure_graphique() 
+        container = QFrame()
+        container.setStyleSheet(f"""
+            QFrame {{
+                background-color: {FOND_CARTE};
+                border-radius: 12px;
+            }}
+            """)      
+        layout_container = QVBoxLayout(container)
+        layout_container.setContentsMargins(10, 10, 10, 10)
+        layout_container.addWidget(self.canvas) 
+        
+        return container
 
    
     def refresh(self):
