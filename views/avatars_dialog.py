@@ -1,8 +1,9 @@
 import os
 from PyQt6.QtWidgets import QDialog,QVBoxLayout,QLabel,QListWidget,QListWidgetItem,QPushButton,QHBoxLayout,QMessageBox
 from PyQt6.QtGui import QIcon
-from PyQt6.QtCore import Qt, QSize
+from PyQt6.QtCore import Qt, QSize, QDirIterator
 from utils.constants import *
+import resources_rc
 
 
 class AvatarChangeDialog(QDialog):
@@ -63,19 +64,35 @@ class AvatarChangeDialog(QDialog):
 
 
     def charger_avatars(self):
-        dossier = "assets/avatars"
-        if not os.path.exists(dossier):
-            return
+        prefix = ":/assets/avatars"
+        it = QDirIterator(prefix)
         extensions = (".png", ".jpg", ".jpeg")
-        for fichier in sorted(os.listdir(dossier)):
-            if fichier.lower().endswith(extensions):
-                chemin = os.path.join(dossier, fichier)
-                item = QListWidgetItem()
-                item.setIcon(QIcon(chemin))
-                item.setText(os.path.splitext(fichier)[0])
-                item.setData( Qt.ItemDataRole.UserRole, chemin)
+        while it.hasNext():
+            chemin = it.next()
+            if not chemin.lower().endswith(extensions):
+                continue
+            nom = os.path.splitext(os.path.basename(chemin))[0]
 
-                self.liste.addItem(item)
+            item = QListWidgetItem()
+            item.setIcon(QIcon(chemin))
+            item.setText(nom)
+            item.setData(Qt.ItemDataRole.UserRole, chemin)
+
+            self.liste.addItem(item)
+
+        # dossier = ":/assets/avatars"
+        # if not os.path.exists(dossier):
+        #     return
+        # extensions = (".png", ".jpg", ".jpeg")
+        # for fichier in sorted(os.listdir(dossier)):
+        #     if fichier.lower().endswith(extensions):
+        #         chemin = os.path.join(dossier, fichier)
+        #         item = QListWidgetItem()
+        #         item.setIcon(QIcon(chemin))
+        #         item.setText(os.path.splitext(fichier)[0])
+        #         item.setData( Qt.ItemDataRole.UserRole, chemin)
+
+        #         self.liste.addItem(item)
 
     def enregistrer(self):
         item = self.liste.currentItem()

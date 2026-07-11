@@ -4,6 +4,7 @@ from PyQt6.QtCore import Qt
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
+import resources_rc
 
 from database import *
 from utils.formatters import format_montant
@@ -49,10 +50,10 @@ class DashboardWidget(QWidget):
         self.cartes_layout.setSpacing(16)
 
         # Création des 4 cartes — gardées en référence pour refresh()
-        self.carte_solde    = self._creer_carte("Solde Total",      "0 Ar", JAUNE_SOLDE,    "assets/icons/solde.png")
-        self.carte_depense  = self._creer_carte("Total Dépenses",   "0 Ar", ROUGE_DEPENSE,  "assets/icons/depense.png")
-        self.carte_economie = self._creer_carte("Économies",        "0 Ar", BLEU_ECONOMIE,  "assets/icons/economie.png")
-        self.carte_dispo    = self._creer_carte("Solde Disponible", "0 Ar", VERT_RECETTE,   "assets/icons/sdispo.png")
+        self.carte_solde    = self._creer_carte("Solde Total",      "0 Ar", JAUNE_SOLDE,    ":/assets/icons/solde.png")
+        self.carte_depense  = self._creer_carte("Total Dépenses",   "0 Ar", ROUGE_DEPENSE,  ":/assets/icons/depense.png")
+        self.carte_economie = self._creer_carte("Économies",        "0 Ar", BLEU_ECONOMIE,  ":/assets/icons/economie.png")
+        self.carte_dispo    = self._creer_carte("Solde Disponible", "0 Ar", VERT_RECETTE,   ":/assets/icons/sdispo.png")
         self.cartes_layout.addWidget(self.carte_solde)
         self.cartes_layout.addWidget(self.carte_depense)
         self.cartes_layout.addWidget(self.carte_economie)

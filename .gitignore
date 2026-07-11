@@ -8,4 +8,6 @@ build/
 dist/
 *.spec
 
+resources_rc.py
+assets/avatars/
 data/

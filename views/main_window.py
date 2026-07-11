@@ -13,6 +13,7 @@ from views.avatar_viewer_dialog import AvatarViewerDialog
 from utils import enregistrer_avatar
 from utils.constants import *
 from session import Session
+import resources_rc
 from config import DB_CONFIG
 
 class ClickableAvatar(QLabel):
@@ -118,13 +119,13 @@ class MainWindow(QMainWindow):
         layout.addSpacing(15)
         layout.addWidget(self._creer_profil())
         layout.addSpacing(10)
-        layout.addWidget(self._creer_nav_bouton("  Dashboard",  "assets/icons/home.png",     0))
-        layout.addWidget(self._creer_nav_bouton("  Recettes",   "assets/icons/recette.png",   1))
-        layout.addWidget(self._creer_nav_bouton("  Dépenses",   "assets/icons/depense.png",  2))
-        layout.addWidget(self._creer_nav_bouton("  Économies",  "assets/icons/economie.png",  3))
-        layout.addWidget(self._creer_nav_bouton("  Historique", "assets/icons/historique.png",  4))
+        layout.addWidget(self._creer_nav_bouton("  Dashboard",  ":/assets/icons/home.png",     0))
+        layout.addWidget(self._creer_nav_bouton("  Recettes",   ":/assets/icons/recette.png",   1))
+        layout.addWidget(self._creer_nav_bouton("  Dépenses",   ":/assets/icons/depense.png",  2))
+        layout.addWidget(self._creer_nav_bouton("  Économies",  ":/assets/icons/economie.png",  3))
+        layout.addWidget(self._creer_nav_bouton("  Historique", ":/assets/icons/historique.png",  4))
         layout.addStretch()  
-        btn_parametres = self._creer_nav_bouton("  Paramètres", "assets/icons/settings.png", -1)
+        btn_parametres = self._creer_nav_bouton("  Paramètres", ":/assets/icons/settings.png", -1)
         btn_parametres.clicked.connect(self._ouvrir_profil_dialog)
         
         layout.addWidget(btn_parametres)
