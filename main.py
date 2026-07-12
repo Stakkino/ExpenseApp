@@ -7,6 +7,7 @@ from views.main_window import MainWindow
 from views.login_dialog import LoginDialog      
 from views.incription_dialog import InscriptionDialog 
 from utils.constants import *
+import resources_rc
 
 class WelcomeWindow(QWidget):
     def __init__(self):
@@ -47,7 +48,7 @@ class WelcomeWindow(QWidget):
         layout_principal.addStretch()
 
         self.logo_label = QLabel()
-        pixmap = QPixmap("assets/icons/logo3.png")
+        pixmap = QPixmap(":/assets/icons/logo3.png")
         if not pixmap.isNull():
             pixmap = pixmap.scaled(160, 160, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
             self.logo_label.setPixmap(pixmap)

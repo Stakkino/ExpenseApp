@@ -4,6 +4,8 @@ from session import Session
 from database import *
 from utils.avatar_manager import lire_avatar
 from utils.constants import *
+from views.message_dialog import CustomMessageDialog
+import resources_rc
 
 class LoginDialog(QDialog):
     def __init__(self, parent = None):
@@ -94,7 +96,7 @@ class LoginDialog(QDialog):
         mdp           = self.input_mdp.text().strip()
 
         if not email or not mdp:
-            QMessageBox.warning(self, "Champs vides", "Veuillez remplir les champs email et mots de passe.")
+            CustomMessageDialog("Champs vides", "Veuillez remplir les champs.", "warning", self).exec()
             return
         utilisateur = verifier_utilisateur(email, mdp)
 
@@ -103,4 +105,4 @@ class LoginDialog(QDialog):
             Session.avatar = lire_avatar(Session.utilisateur_email)
             self.accept()
         else:
-            QMessageBox.critical(self, "Erreur", "Vérifiez l'email ou le mot de passe !.")
+            CustomMessageDialog("Erreur", "Email ou mot de passe incorrect.", "error", self).exec()

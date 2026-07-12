@@ -9,3 +9,4 @@ from .main_window import ClickableAvatar, MainWindow
 from .profil_dialog import ProfilDialog
 from .recette_dialog import RecetteDialog
 from .table_widget import TableWidget
+from .message_dialog import CustomMessageDialog
