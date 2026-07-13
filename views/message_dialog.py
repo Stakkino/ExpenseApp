@@ -1,54 +1,80 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QLabel, QPushButton, QFrame
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
 from utils.constants import *
 import resources_rc 
 
 class CustomMessageDialog(QDialog):
-    def __init__(self, title, message, type="info", parent=None):
-        super().__init__(parent)
-        self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.Dialog)
-        self.setFixedSize(350, 200)
-        icons = {
+    icons = {
             "error": ":/assets/icons/error.png",
             "warning": ":/assets/icons/alert.png",
-            "success": ":/assets/icons/succes.png",
+            "success": ":/assets/icons/circle-check.png",
             "info": ":/assets/icons/info.png"
         }
-        
-        # Layout principal
-        self.setStyleSheet(f"background-color: {FOND_SECONDAIRE}; border: 1px solid #374151;")
-        layout = QVBoxLayout(self)
-        layout.setContentsMargins(20, 20, 20, 20)
-        
-        # Icon
+    
+    def __init__(self, title, message, type="info", parent=None):
+        super().__init__(parent)
+        self.setWindowTitle(title)
+        self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.Dialog)
+        self.setFixedSize(360, 170)
+        self.setStyleSheet(f"""
+            QDialog {{
+                background-color: {FOND_SECONDAIRE};
+                border-radius: 10px;
+            }}
+        """)
+
+        main_layout = QVBoxLayout(self)
+        main_layout.setContentsMargins(20, 20, 20, 20)
+        main_layout.setSpacing(15)
+        content_layout = QHBoxLayout()
+        content_layout.setContentsMargins(0, 0, 0, 0)
+        content_layout.setSpacing(8)
+
         icon_label = QLabel()
-        pixmap = QPixmap(icons.get(type, icons["info"]))
+        icon_label.setFixedSize(40, 40)
+        icon_label.setAlignment(Qt.AlignmentFlag.AlignTop)
+        icon_path = self.icons.get(type, self.icons["info"])
+        pixmap = QPixmap(icon_path)
         if not pixmap.isNull():
-            icon_label.setPixmap(pixmap.scaled(48, 48, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
-        icon_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        
-        # Text
+            icon_label.setPixmap(pixmap.scaled(40,40,Qt.AspectRatioMode.KeepAspectRatio,Qt.TransformationMode.SmoothTransformation))
         msg_label = QLabel(message)
         msg_label.setWordWrap(True)
-        msg_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        msg_label.setStyleSheet("font-size: 14px; color: #FFFFFF; font-family: sans-serif;")
-        
-        # Bouton OK
-        btn = QPushButton("OK")
-        btn.setCursor(Qt.CursorShape.PointingHandCursor)
-        btn.setStyleSheet(f"""
-            QPushButton {{ 
-                background-color: {ACCENT_PRIMAIRE}; 
-                color: white; 
-                border-radius: 8px; 
-                padding: 10px; 
-                font-weight: bold; 
-            }}
-            QPushButton:hover {{ background-color: #2b82c9; }}
+        msg_label.setAlignment(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft)
+        msg_label.setContentsMargins(0, 0, 0, 0)
+
+        msg_label.setStyleSheet("""
+            QLabel{
+                color: white;
+                font-size:14px;
+                font-family:Segoe UI;
+                border:none;
+                margin:0px;
+                padding:0px;
+            }
         """)
+        content_layout.addWidget(icon_label)
+        content_layout.addWidget(msg_label, 1)
+
+        btn = QPushButton("OK")
+        btn.setFixedSize(90, 32)
+        btn.setStyleSheet(f"""
+            QPushButton {{
+                background-color: {ACCENT_PRIMAIRE};
+                color: white;
+                border: none;
+                border-radius: 6px;
+                font-weight: bold;
+            }}
+            QPushButton:hover {{
+                background-color: #2b82c9;
+            }}
+            QPushButton:pressed {{
+                background-color: #1d6fa5;
+            }}
+            """)
         btn.clicked.connect(self.accept)
-        
-        layout.addWidget(icon_label)
-        layout.addWidget(msg_label)
-        layout.addWidget(btn)
+
+        main_layout.addLayout(content_layout)
+        main_layout.addStretch()
+        main_layout.addWidget(btn, alignment=Qt.AlignmentFlag.AlignCenter)

@@ -101,6 +101,7 @@ class LoginDialog(QDialog):
         utilisateur = verifier_utilisateur(email, mdp)
 
         if utilisateur:
+            CustomMessageDialog("Connexion", "Connexion réussie !", "success", self).exec()
             Session.connecter(utilisateur[0:5])
             Session.avatar = lire_avatar(Session.utilisateur_email)
             self.accept()
