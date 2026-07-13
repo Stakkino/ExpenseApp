@@ -1,80 +1,129 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QPixmap
+
+from PyQt6.QtWidgets import QDialog,QVBoxLayout,QLabel,QPushButton,QWidget,QGraphicsDropShadowEffect
+from PyQt6.QtCore import Qt,QPropertyAnimation
+from PyQt6.QtGui import QColor,QPixmap
+from BlurWindow.blurWindow import blur
+
 from utils.constants import *
-import resources_rc 
+import resources_rc
+
 
 class CustomMessageDialog(QDialog):
-    icons = {
-            "error": ":/assets/icons/error.png",
-            "warning": ":/assets/icons/alert.png",
-            "success": ":/assets/icons/succes.png",
-            "info": ":/assets/icons/info.png"
-        }
-    
-    def __init__(self, title, message, type="info", parent=None):
+    ICONS = {
+        "success": ":/assets/icons/succes.png",
+        "error": ":/assets/icons/error.png",
+        "warning": ":/assets/icons/alert.png",
+        "info": ":/assets/icons/info.png",
+    }
+
+    BORDERS = {
+        "success":"#2ECC71",
+        "error":"#E74C3C",
+        "warning":"#F1C40F",
+        "info":"#3498DB",
+    }
+
+    def __init__(self,title,message,type="info",parent=None):
         super().__init__(parent)
         self.setWindowTitle(title)
-        self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.Dialog)
-        self.setFixedSize(360, 170)
-        self.setStyleSheet(f"""
-            QDialog {{
-                background-color: {FOND_SECONDAIRE};
-                border-radius: 10px;
-            }}
+        self.setFixedSize(300,240)
+        self.setWindowFlags(Qt.WindowType.Dialog |Qt.WindowType.FramelessWindowHint)
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
+        self.setStyleSheet("""QDialog{background: transparent;border: none;}""")
+        border=self.BORDERS.get(type,"#3498DB")
+        root=QVBoxLayout(self)
+        root.setContentsMargins(0,0,0,0)
+        root.setSpacing(0)
+
+        card=QWidget()
+        card.setObjectName("card")
+        card.setStyleSheet(f"""
+        #card{{
+            background-color:rgba(36,36,36,245);
+            border:2px solid {border};
+            border-radius:18px;
+        }}
+
+        QLabel{{
+            border:none;
+            color:white;
+            background:transparent;
+        }}
+
+        QPushButton{{
+            background:{ACCENT_PRIMAIRE};
+            color:white;
+            border:none;
+            border-radius:8px;
+            padding:8px 22px;
+            font:600 13px 'Segoe UI';
+        }}
+
+        QPushButton:hover{{
+            background:#2b82c9;
+        }}
+        """)
+        root.addWidget(card)
+
+        layout=QVBoxLayout(card)
+        layout.setContentsMargins(20,20,20,20)
+        layout.setSpacing(12)
+        layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        icon=QLabel()
+        icon.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        pix=QPixmap(self.ICONS.get(type,self.ICONS["info"]))
+        if not pix.isNull():
+            icon.setPixmap(
+                pix.scaled(
+                    42,42,
+                    Qt.AspectRatioMode.KeepAspectRatio,
+                    Qt.TransformationMode.SmoothTransformation
+                )
+            )
+
+        titleLabel=QLabel(title)
+        titleLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        titleLabel.setStyleSheet("""
+        QLabel{
+            color:white;
+            font:700 17px 'Segoe UI';
+            border:none;
+        }
         """)
 
-        main_layout = QVBoxLayout(self)
-        main_layout.setContentsMargins(20, 20, 20, 20)
-        main_layout.setSpacing(15)
-        content_layout = QHBoxLayout()
-        content_layout.setContentsMargins(0, 0, 0, 0)
-        content_layout.setSpacing(8)
-
-        icon_label = QLabel()
-        icon_label.setFixedSize(40, 40)
-        icon_label.setAlignment(Qt.AlignmentFlag.AlignTop)
-        icon_path = self.icons.get(type, self.icons["info"])
-        pixmap = QPixmap(icon_path)
-        if not pixmap.isNull():
-            icon_label.setPixmap(pixmap.scaled(40,40,Qt.AspectRatioMode.KeepAspectRatio,Qt.TransformationMode.SmoothTransformation))
-        msg_label = QLabel(message)
-        msg_label.setWordWrap(True)
-        msg_label.setAlignment(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft)
-        msg_label.setContentsMargins(0, 0, 0, 0)
-
-        msg_label.setStyleSheet("""
-            QLabel{
-                color: white;
-                font-size:14px;
-                font-family:Segoe UI;
-                border:none;
-                margin:0px;
-                padding:0px;
-            }
+        msg=QLabel(message)
+        msg.setWordWrap(True)
+        msg.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        msg.setStyleSheet("""
+        QLabel{
+            color:#E8E8E8;
+            font:14px 'Segoe UI';
+            border:none;
+        }
         """)
-        content_layout.addWidget(icon_label)
-        content_layout.addWidget(msg_label, 1)
 
-        btn = QPushButton("OK")
-        btn.setFixedSize(90, 32)
-        btn.setStyleSheet(f"""
-            QPushButton {{
-                background-color: {ACCENT_PRIMAIRE};
-                color: white;
-                border: none;
-                border-radius: 6px;
-                font-weight: bold;
-            }}
-            QPushButton:hover {{
-                background-color: #2b82c9;
-            }}
-            QPushButton:pressed {{
-                background-color: #1d6fa5;
-            }}
-            """)
-        btn.clicked.connect(self.accept)
+        ok=QPushButton("OK")
+        ok.setFixedWidth(110)
+        ok.clicked.connect(self.accept)
 
-        main_layout.addLayout(content_layout)
-        main_layout.addStretch()
-        main_layout.addWidget(btn, alignment=Qt.AlignmentFlag.AlignCenter)
+        layout.addStretch()
+        layout.addWidget(icon)
+        layout.addWidget(titleLabel)
+        layout.addWidget(msg)
+        layout.addSpacing(8)
+        layout.addWidget(ok,alignment=Qt.AlignmentFlag.AlignCenter)
+        layout.addStretch()
+
+        self.setWindowOpacity(0)
+        self.anim=QPropertyAnimation(self,b"windowOpacity")
+        self.anim.setDuration(180)
+        self.anim.setStartValue(0)
+        self.anim.setEndValue(1)
+        self.anim.start()
+
+    def keyPressEvent(self,event):
+        if event.key() in (Qt.Key.Key_Return,Qt.Key.Key_Enter,Qt.Key.Key_Escape):
+            self.accept()
+        else:
+            super().keyPressEvent(event)

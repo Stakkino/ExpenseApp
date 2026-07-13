@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import QDialog,QVBoxLayout,QLabel,QListWidget,QListWidgetIt
 from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import Qt, QSize, QDirIterator
 from utils.constants import *
+from views.message_dialog import CustomMessageDialog 
 import resources_rc
 
 
@@ -80,28 +81,11 @@ class AvatarChangeDialog(QDialog):
 
             self.liste.addItem(item)
 
-        # dossier = ":/assets/avatars"
-        # if not os.path.exists(dossier):
-        #     return
-        # extensions = (".png", ".jpg", ".jpeg")
-        # for fichier in sorted(os.listdir(dossier)):
-        #     if fichier.lower().endswith(extensions):
-        #         chemin = os.path.join(dossier, fichier)
-        #         item = QListWidgetItem()
-        #         item.setIcon(QIcon(chemin))
-        #         item.setText(os.path.splitext(fichier)[0])
-        #         item.setData( Qt.ItemDataRole.UserRole, chemin)
-
-        #         self.liste.addItem(item)
 
     def enregistrer(self):
         item = self.liste.currentItem()
         if item is None:
-            QMessageBox.warning(
-                self,
-                "Avatar",
-                "Veuillez choisir un avatar."
-            )
+            CustomMessageDialog("Avatar","Veuillez choisir un avatar.","warning",self).exec()
             return
 
         self.avatar_selectionne = item.data(Qt.ItemDataRole.UserRole)
