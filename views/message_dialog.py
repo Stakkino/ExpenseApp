@@ -8,7 +8,7 @@ class CustomMessageDialog(QDialog):
     icons = {
             "error": ":/assets/icons/error.png",
             "warning": ":/assets/icons/alert.png",
-            "success": ":/assets/icons/circle-check.png",
+            "success": ":/assets/icons/succes.png",
             "info": ":/assets/icons/info.png"
         }
     
