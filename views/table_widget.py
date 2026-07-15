@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QFrame, QDateEdit, QTableWidget, QHeaderView, QTableWidgetItem
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QDateEdit, QTableWidget, QHeaderView, QTableWidgetItem
 from PyQt6.QtCore import Qt, QDate
 
 from database import *

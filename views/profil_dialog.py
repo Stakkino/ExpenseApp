@@ -1,11 +1,10 @@
-import os
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QDateEdit, QPushButton, QMessageBox
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QDateEdit, QPushButton
 from PyQt6.QtCore import Qt, QDate
 
 from database import *
 from utils.constants import *
 from session import Session
-from config import DB_CONFIG 
+from views.message_dialog import CustomMessageDialog
 
 class ProfilDialog(QDialog):
     def __init__(self, parent = None):
@@ -165,7 +164,7 @@ class ProfilDialog(QDialog):
         
 
         if not nom or not email:
-            QMessageBox.warning(self, "Champ vide", "Veuillez saisir votre Nom ou votre Email.")
+            CustomMessageDialog("Champ vide", "Veuillez saisir votre Nom ou votre Email.", "warning", self).exec()
             return
         
         succes = modification_info(nom, prenom, email, datenaissance)
@@ -176,7 +175,7 @@ class ProfilDialog(QDialog):
             Session.utilisateur_email = email
             Session.utilisateur_datenaissance = datenaissance
             
-            QMessageBox.information(self, "Succès", "Modifié avec succès.")
+            CustomMessageDialog("Succès", "Modifié avec succès.", "success", self).exec()
             self.accept() 
         else:
-            QMessageBox.critical(self, "Erreur", "Impossible de modifier.\nVérifiez la connexion ou les champs !.")
+            CustomMessageDialog("Erreur", "Impossible de modifier.\nVérifiez la connexion ou les champs !.", "error", self).exec()

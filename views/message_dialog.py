@@ -1,7 +1,6 @@
-
-from PyQt6.QtWidgets import QDialog,QVBoxLayout,QLabel,QPushButton,QWidget,QGraphicsDropShadowEffect
+from PyQt6.QtWidgets import QDialog,QVBoxLayout,QLabel,QPushButton,QWidget
 from PyQt6.QtCore import Qt,QPropertyAnimation
-from PyQt6.QtGui import QColor,QPixmap
+from PyQt6.QtGui import QPixmap
 from BlurWindow.blurWindow import blur
 
 from utils.constants import *

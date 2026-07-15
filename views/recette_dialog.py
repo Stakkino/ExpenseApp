@@ -1,9 +1,10 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel,QLineEdit, QPushButton,QMessageBox
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel,QLineEdit, QPushButton
 from PyQt6.QtCore import Qt
 from decimal import Decimal, InvalidOperation
 
 from database import *
 from utils.constants import *
+from views.message_dialog import CustomMessageDialog
 
 
 class RecetteDialog(QDialog):
@@ -95,21 +96,21 @@ class RecetteDialog(QDialog):
         descriptions  = self.input_description.text().strip()
 
         if not txt_montant:
-            QMessageBox.warning(self, "Champ vide", "Veuillez saisir un montant.")
+            CustomMessageDialog("Champ vide", "Veuillez saisir un montant.", "warning", self).exec()
             return 
         try:
             montantr = Decimal(txt_montant)
         except InvalidOperation:
-            QMessageBox.warning(self, "Montant invalide", "Le montant doit être un nombre valide.")
+            CustomMessageDialog("Montant invalide", "Le montant doit être un nombre valide.", "info", self).exec()
             return
         if montantr <= 0 :
-            QMessageBox.warning(self, "Montant invalide", "Le montant doit être supérieur à 0.")
+            CustomMessageDialog("Montant invalide", "Le montant doit être supérieur à 0.", "info", self).exec()
             return
         
         succes = ajoutrecette(montantr, descriptions)
 
         if succes:
-            QMessageBox.information(self, "Succès", "Recette ajoutée avec succès.")
+            CustomMessageDialog("Succès", "Recette ajoutée avec succès.", "succes", self).exec()
             self.accept()
         else:
-            QMessageBox.critical(self, "Erreur", "Impossible d'ajouter la Recette.")
+            CustomMessageDialog("Erreur", "Impossible d'ajouter la Recette.", "error", self).exec()

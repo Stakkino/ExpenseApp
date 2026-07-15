@@ -1,6 +1,6 @@
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
-from utils.constants import FOND_CARTE
+from utils.constants import *
 
 def creer_figure_graphique():
     fig = Figure(figsize=(5, 2), dpi=100, facecolor=FOND_CARTE)

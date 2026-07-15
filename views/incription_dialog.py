@@ -1,8 +1,9 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel,QLineEdit, QDateEdit, QPushButton,QMessageBox
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel,QLineEdit, QDateEdit, QPushButton
 from PyQt6.QtCore import Qt, QDate
 
 from database import *
 from utils.constants import *
+from views.message_dialog import CustomMessageDialog
 
 
 class InscriptionDialog(QDialog):
@@ -172,19 +173,19 @@ class InscriptionDialog(QDialog):
         cmdp          = self.input_cmdp.text().strip()
 
         if not nom or not email:
-            QMessageBox.warning(self, "Champ vide", "Veuillez saisir votre Nom ou votre Email.")
+            CustomMessageDialog("Champ vide", "Veuillez saisir votre Nom ou votre Email.", "warning", self).exec()
             return
         if not mdp or not cmdp:
-            QMessageBox.warning(self, "Champ vide", "Veuillez remplir les champs de mots de passe.")
+            CustomMessageDialog("Champ vide", "Veuillez remplir les champs de mots de passe.", "warning", self).exec()
             return
         if cmdp != mdp:
-            QMessageBox.warning(self, "Mots de passe non identique")
+            CustomMessageDialog("Vérification", "Mots de passe non identique", "info", self).exec()
             return
         
         succes = incription(nom, prenom, email, datenaissance, mdp)
 
         if succes:
-            #QMessageBox.information(self, "Succès", "Incrire avec succès.")
+            CustomMessageDialog("Succès", "Incrire avec succès.", "success", self).exec()
             self.accept() 
         else:
-            QMessageBox.critical(self, "Erreur", "Impossible d'inscrire.\n""Vérifiez la connexion ou les champs !.")
+            CustomMessageDialog("Erreur", "Impossible d'inscrire.\nVérifiez la connexion ou les champs !.", "error", self).exec()

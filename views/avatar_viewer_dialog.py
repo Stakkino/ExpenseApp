@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QDialog,QLabel,QPushButton,QVBoxLayout,QHBoxLayout
 from PyQt6.QtGui import QPixmap
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, pyqtSignal
 
 from session import Session
 from utils.constants import *
@@ -9,6 +9,7 @@ from utils.avatar_manager import enregistrer_avatar
 
 
 class AvatarViewerDialog(QDialog):
+    avatar_changed = pyqtSignal()
     def __init__(self, parent=None):
         super().__init__(parent)
         self.parent_window = parent
@@ -98,5 +99,5 @@ class AvatarViewerDialog(QDialog):
                 pix = QPixmap(chemin)
                 pix = pix.scaled( 180, 180, Qt.AspectRatioMode.KeepAspectRatioByExpanding, Qt.TransformationMode.SmoothTransformation)
                 self.avatar.setPixmap(pix)
-                if self.parent_window:
-                    self.parent_window.refresh_avatar()
+                self.avatar_changed.emit() # Alefaso ny signal fa niova ny avatar
+                self.close()

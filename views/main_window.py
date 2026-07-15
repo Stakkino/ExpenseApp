@@ -14,7 +14,7 @@ from utils import enregistrer_avatar
 from utils.constants import *
 from session import Session
 import resources_rc
-from config import DB_CONFIG
+
 
 class ClickableAvatar(QLabel):
     clicked = pyqtSignal()
@@ -197,6 +197,8 @@ class MainWindow(QMainWindow):
 
     def ouvrir_avatar_change(self):
         dialog = AvatarViewerDialog(self)
+        # Ifandraiso ny signal avy amin'ny dialog mankany amin'ny method refresh_avatar
+        dialog.avatar_changed.connect(self.refresh_avatar) 
         dialog.exec()
 
 
@@ -321,7 +323,7 @@ class MainWindow(QMainWindow):
     def _ouvrir_profil_dialog(self):
         dialog = ProfilDialog(self)
         if dialog.exec():
-            self._creer_profil()
+            self.refresh_avatar()
 
     def _ouvrir_recette_dialog(self):
         dialog = RecetteDialog(self)

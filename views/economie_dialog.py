@@ -1,9 +1,10 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel,QLineEdit, QComboBox, QPushButton,QMessageBox
+from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel,QLineEdit, QComboBox, QPushButton
 from PyQt6.QtCore import Qt
 from decimal import Decimal, InvalidOperation
 
 from database import *
 from utils.constants import *
+from views.message_dialog import CustomMessageDialog
 
 class EconomieDialog(QDialog):
     def __init__(self, parent = None):
@@ -117,25 +118,25 @@ class EconomieDialog(QDialog):
         descriptions  = self.input_description.text().strip()
 
         if not txt_montant:
-            QMessageBox.warning(self, "Champ vide", "Veuillez saisir un montant.")
+            CustomMessageDialog("Champ vide", "Veuillez saisir un montant.", "warning", self).exec()
             return
         try:
             montante = Decimal(txt_montant)
         except InvalidOperation:
-            QMessageBox.warning(self, "Montant invalide", "Le montant doit être un nombre valide.")
+            CustomMessageDialog("Montant invalide", "Le montant doit être un nombre valide.", "info", self).exec()
             return
         if montante <= 0:
-            QMessageBox.warning(self, "Montant invalide", "Le montant doit être supérieur à 0.")
+            CustomMessageDialog("Montant invalide", "Le montant doit être supérieur à 0.", "info", self).exec()
             return
         
         if types is None:
-            QMessageBox.warning(self, "Champ vide", "Veuillez choisir un type.")
+            CustomMessageDialog("Champ vide", "Veuillez choisir un type.", "warning", self).exec()
             return
         
         succes = actionconomie(types, montante, descriptions)
 
         if succes:
-            QMessageBox.information(self, "Succès", "Économie ajoutée avec succès.")
+            CustomMessageDialog("Succès", "Économie ajoutée avec succès.", "success", self).exec()
             self.accept() 
         else:
-            QMessageBox.critical(self, "Erreur", "Impossible d'ajouter l'économie.\n""Vérifiez que le montant ne dépasse pas le solde économie.")
+            CustomMessageDialog("Erreur", "Impossible d'ajouter l'économie.\nVérifiez que le montant ne dépasse pas le solde économie.", "error", self).exec()
