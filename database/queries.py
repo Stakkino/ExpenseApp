@@ -246,27 +246,27 @@ def get_all_recette(date_debut=None, date_fin=None) -> list:
         return []
 
 #-------------------RECETTES PAR SEMAINE-------------------
-def get_recettes_semaine():
+def get_recettes_semaine(offset=0):
     sql = """
         SELECT DAYOFWEEK(dater), COALESCE(SUM(montantr),0)
         FROM Recette
         WHERE utilisateur = %s
-        AND dater >= %s
+        AND dater >= %s AND dater <= %s
         GROUP BY DAYOFWEEK(dater)
         """
     try:
         aujourdhui = datetime.now()
-        debut = aujourdhui - timedelta(days=6)
+        debut = aujourdhui + timedelta(weeks=offset) - timedelta(days=aujourdhui.weekday())
+        fin = debut + timedelta(days=6)
         resultat = [0] * 7
         with DBConnection() as conx:
             curseur = conx.cursor()
-            curseur.execute(sql, (Session.utilisateur_id, debut))
+            curseur.execute(sql, (Session.utilisateur_id, debut, fin))
             for jour, total in curseur.fetchall():
-                index = (jour + 5) % 7
+                index = (jour - 2) % 7 
                 resultat[index] = float(total)
         return resultat
     except Exception as e:
-        print(f"Erreur DB : {e}")
         return [0] * 7
     
 
@@ -301,27 +301,27 @@ def get_all_depense(date_debut=None, date_fin=None) -> list:
 
 
 #-------------------DEPENSES PAR SEMAINE-------------------
-def get_depenses_semaine():
+def get_depenses_semaine(offset=0):
     sql = """
         SELECT DAYOFWEEK(dated), COALESCE(SUM(montantd),0)
         FROM Depense
         WHERE utilisateur = %s
-        AND dated >= %s
+        AND dated >= %s AND dated <= %s
         GROUP BY DAYOFWEEK(dated)
         """
     try:
         aujourdhui = datetime.now()
-        debut = aujourdhui - timedelta(days=6)
+        debut = aujourdhui + timedelta(weeks=offset) - timedelta(days=aujourdhui.weekday())
+        fin = debut + timedelta(days=6)
         resultat = [0] * 7
         with DBConnection() as conx:
             curseur = conx.cursor()
-            curseur.execute(sql, (Session.utilisateur_id, debut))
+            curseur.execute(sql, (Session.utilisateur_id, debut, fin))
             for jour, total in curseur.fetchall():
-                index = (jour + 5) % 7
+                index = (jour - 2) % 7 
                 resultat[index] = float(total)
         return resultat
     except Exception as e:
-        print(f"Erreur DB : {e}")
         return [0] * 7
 
 

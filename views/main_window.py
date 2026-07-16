@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QStackedWidget, QFrame, QMenu
+from PyQt6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QStackedWidget, QFrame, QMenu, QSizeGrip
 from PyQt6.QtGui import QIcon, QPixmap, QAction
 from PyQt6.QtCore import Qt, QSize, QPoint, pyqtSignal
 
@@ -252,6 +252,10 @@ class MainWindow(QMainWindow):
         self.pages.addWidget(self.page_historique)         
 
         layout.addWidget(self.pages)
+
+        #agrandissement
+        grip = QSizeGrip(frame)
+        layout.addWidget(grip, alignment=Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignRight)
         return frame
 
 
@@ -310,10 +314,12 @@ class MainWindow(QMainWindow):
         return topbar
     
     def _toggle_maximize(self):
-        if self.isMaximized():
+        if self._is_maximized:
             self.showNormal()
+            self._is_maximized = False
         else:
             self.showMaximized()
+            self._is_maximized = True
 
     def _naviguer(self, index: int):
         self.pages.setCurrentIndex(index)

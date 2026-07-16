@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QFrame, QLabel, QSizePolicy
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QFrame, QLabel, QSizePolicy, QPushButton
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 import resources_rc
@@ -6,17 +6,13 @@ import resources_rc
 from database import *
 from utils.formatters import format_montant
 from utils.constants import *
-from views.graphique import creer_figure_graphique, dessiner_bar_chart
-
+from views.graphique import dessiner_courbe, creer_figure_graphique
 
 class TransactionRow(QFrame):
-    """Tsipika iray ho an'ny transaction (Recent Transactions)"""
     def __init__(self, type_trans, montant, desc, date):
         super().__init__()
         self.setStyleSheet("background-color: transparent;")
         layout = QHBoxLayout(self)
-        
-        # Loko miankina amin'ny type
         color = VERT_RECETTE if type_trans == 'Recette' else ROUGE_DEPENSE
         signe = "+" if type_trans == 'Recette' else "-"
         label_desc = QLabel(f"{desc}\n{str(date)}")
@@ -32,6 +28,7 @@ class DashboardWidget(QWidget):
         super().__init__(parent)
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         self.setStyleSheet(f"background-color: {FOND_PRINCIPAL};")
+        self.offset_semaine = 0
         self._construire_ui()
         self.refresh()
 
@@ -60,6 +57,37 @@ class DashboardWidget(QWidget):
         self.canvas = self._creer_graphique()
         self.graphique_container = self._creer_graphique()
         layout.addWidget(self.graphique_container) 
+        nav_layout = QHBoxLayout()
+        btn_style = """
+            QPushButton {
+                background-color: #2c3e50; 
+                color: white; 
+                border-radius: 5px; 
+                padding: 5px 15px;
+                font-weight: bold;
+            }
+            QPushButton:hover { background-color: #34495e; }
+        """
+        btn_prev = QPushButton("<")
+        btn_prev.setStyleSheet(btn_style)
+        btn_prev.clicked.connect(lambda: self.changer_semaine(-1))
+        btn_next = QPushButton(">")
+        btn_next.setStyleSheet(btn_style)
+        btn_next.clicked.connect(lambda: self.changer_semaine(1))
+
+        self.label_semaine = QLabel("Semaine actuelle")
+        self.label_semaine.setStyleSheet("""
+            color: white; 
+            font-weight: bold; 
+            background-color: #2c3e50; 
+            border-radius: 5px; 
+            padding: 5px;
+        """)
+        self.label_semaine.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        nav_layout.addWidget(btn_prev)
+        nav_layout.addWidget(self.label_semaine) 
+        nav_layout.addWidget(btn_next)
+        layout.addLayout(nav_layout)
 
         # 3. Transactions récentes (Layout container)
         self.trans_container = QVBoxLayout()
@@ -111,20 +139,24 @@ class DashboardWidget(QWidget):
         return carte
     
 
+    def changer_semaine(self, delta):
+        self.offset_semaine += delta
+        self.refresh()
+
     def _creer_graphique(self):
-        self.figure, self.canvas, self.ax = creer_figure_graphique() 
-        container = QFrame()
-        container.setStyleSheet(f"""
-            QFrame {{
-                background-color: {FOND_CARTE};
-                border-radius: 12px;
-            }}
-            """)      
-        layout_container = QVBoxLayout(container)
-        layout_container.setContentsMargins(10, 10, 10, 10)
-        layout_container.addWidget(self.canvas) 
-        
-        return container
+            self.figure, self.canvas, self.ax = creer_figure_graphique() 
+            container = QFrame()
+            container.setStyleSheet(f"""
+                QFrame {{
+                    background-color: {FOND_CARTE};
+                    border-radius: 12px;
+                }}
+                """)      
+            layout_container = QVBoxLayout(container)
+            layout_container.setContentsMargins(10, 10, 10, 10)
+            layout_container.addWidget(self.canvas) 
+            
+            return container
 
    
     def refresh(self):
@@ -134,10 +166,18 @@ class DashboardWidget(QWidget):
         self.carte_economie.label_valeur.setText(format_montant(get_total_economie()))
         self.carte_dispo.label_valeur.setText(format_montant(get_solde_dispo()))
 
+
+        if self.offset_semaine == 0:
+            self.label_semaine.setText("Semaine actuelle")
+        elif self.offset_semaine == -1:
+            self.label_semaine.setText("Semaine dernière")
+        else:
+            self.label_semaine.setText(f"Il y a {abs(self.offset_semaine)}semaines")
+
         # 2. Refresh graphique
-        recettes = get_recettes_semaine()
-        depenses = get_depenses_semaine()
-        dessiner_bar_chart(self.ax, recettes, depenses)
+        recettes = get_recettes_semaine(self.offset_semaine)
+        depenses = get_depenses_semaine(self.offset_semaine)
+        dessiner_courbe(self.ax, recettes, depenses)
         self.canvas.draw()
 
         # Refresh Transactions
