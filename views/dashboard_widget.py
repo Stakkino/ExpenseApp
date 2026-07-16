@@ -177,7 +177,8 @@ class DashboardWidget(QWidget):
         # 2. Refresh graphique
         recettes = get_recettes_semaine(self.offset_semaine)
         depenses = get_depenses_semaine(self.offset_semaine)
-        dessiner_courbe(self.ax, recettes, depenses)
+        economies = get_economie_semaine(self.offset_semaine)
+        dessiner_courbe(self.ax, recettes, depenses, economies)
         self.canvas.draw()
 
         # Refresh Transactions

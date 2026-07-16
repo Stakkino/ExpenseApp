@@ -15,6 +15,7 @@ from .queries import (
     get_all_depense,
     get_depenses_semaine,
     get_all_economie,
+    get_economie_semaine,
     get_all_historique,
     get_transactions_recentes
 )

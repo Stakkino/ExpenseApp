@@ -350,6 +350,32 @@ def get_all_economie(date_debut=None, date_fin=None) -> list:
         print(f"Erreur des listes d'Economie : {e}")
         return []
 
+
+#-------------------ECONOMI PAR SEMAINE-------------------
+def get_economie_semaine(offset=0):
+    sql = """
+        SELECT DAYOFWEEK(datee), COALESCE(SUM(montante),0)
+        FROM Economie
+        WHERE utilisateur = %s
+        AND datee >= %s AND datee <= %s
+        GROUP BY DAYOFWEEK(datee)
+        """
+    try:
+        aujourdhui = datetime.now()
+        debut = aujourdhui + timedelta(weeks=offset) - timedelta(days=aujourdhui.weekday())
+        fin = debut + timedelta(days=6)
+        resultat = [0] * 7
+        with DBConnection() as conx:
+            curseur = conx.cursor()
+            curseur.execute(sql, (Session.utilisateur_id, debut, fin))
+            for jour, total in curseur.fetchall():
+                index = (jour - 2) % 7 
+                resultat[index] = float(total)
+        return resultat
+    except Exception as e:
+        return [0] * 7
+
+
 #-----------------------HISTORIQUE------------------------
 def get_all_historique(date_debut=None, date_fin=None) -> list:
 
