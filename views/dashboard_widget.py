@@ -54,6 +54,7 @@ class DashboardWidget(QWidget):
         layout.addLayout(self.cartes_layout)
 
         # 2. Graphique
+        #self.canvas = self._creer_graphique()
         self.graphique_container = self._creer_graphique()
         layout.addWidget(self.graphique_container) 
         nav_layout = QHBoxLayout()
@@ -179,6 +180,7 @@ class DashboardWidget(QWidget):
         economies = get_economie_semaine(self.offset_semaine)
         dessiner_courbe(self.ax, recettes, depenses, economies)
         self.canvas.draw()
+        self.trans_container.update()
 
         # Refresh Transactions
         for i in reversed(range(self.trans_container.count())):

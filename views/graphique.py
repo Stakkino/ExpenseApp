@@ -2,6 +2,7 @@ from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from utils.constants import *
 
+
 class GraphiqueManager:
     def __init__(self):
         self.fig = Figure( figsize=(7, 3.5), dpi=100,facecolor=FOND_CARTE)
