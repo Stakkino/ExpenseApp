@@ -54,7 +54,6 @@ class DashboardWidget(QWidget):
         layout.addLayout(self.cartes_layout)
 
         # 2. Graphique
-        self.canvas = self._creer_graphique()
         self.graphique_container = self._creer_graphique()
         layout.addWidget(self.graphique_container) 
         nav_layout = QHBoxLayout()
