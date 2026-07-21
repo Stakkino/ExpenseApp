@@ -35,7 +35,9 @@ class GraphiqueManager:
         self.ax.set_xticks(list(x))
         self.ax.set_xticklabels(labels)
         self.ax.set_ylabel("Montant (Ar)",color="white",fontsize=9)
-        self.ax.legend(loc="upper center",bbox_to_anchor=(0.5, 1.20),ncol=3,frameon=False,labelcolor="white",fontsize=8)
+        if any(recettes) or any(depenses) or any(economies):
+           self.ax.grid(axis='y',color='white',linestyle='--',alpha=0.15)
+        self.ax.legend(loc="upper center",bbox_to_anchor=(0.5, 1.30),ncol=3,frameon=False,labelcolor="white",fontsize=8)
         self.ax.spines['top'].set_visible(False)
         self.ax.spines['right'].set_visible(False)
         self.fig.tight_layout(rect=[0, 0, 1, 0.90])
@@ -67,5 +69,7 @@ def dessiner_courbe(ax,recettes,depenses,economies):
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
     ax.set_ylabel("Montant (Ar)",color="white",fontsize=9)
-    ax.legend(loc="upper center",bbox_to_anchor=(0.5, 1.20),ncol=3,frameon=False,labelcolor="white",fontsize=8)
+    ax.legend(loc="upper center",bbox_to_anchor=(0.5, 1.30),ncol=3,frameon=False,labelcolor="white",fontsize=8)
+    if any(recettes) or any(depenses) or any(economies):
+        ax.grid(axis='y',color='white',linestyle='--',alpha=0.15)
     ax.figure.subplots_adjust(left=0.08,right=0.98,top=0.90,bottom=0.20)
