@@ -251,13 +251,13 @@ def get_recettes_semaine(offset=0):
         SELECT DAYOFWEEK(dater), COALESCE(SUM(montantr),0)
         FROM Recette
         WHERE utilisateur = %s
-        AND dater >= %s AND dater <= %s
+        AND dater >= %s AND dater < %s
         GROUP BY DAYOFWEEK(dater)
         """
     try:
         aujourdhui = datetime.now()
-        debut = aujourdhui + timedelta(weeks=offset) - timedelta(days=aujourdhui.weekday())
-        fin = debut + timedelta(days=6)
+        debut = (aujourdhui + timedelta(weeks=offset) - timedelta(days=aujourdhui.weekday())).replace(hour=0,minute=0,second=0,microsecond=0)
+        fin = debut + timedelta(days=7)
         resultat = [0] * 7
         with DBConnection() as conx:
             curseur = conx.cursor()
@@ -306,13 +306,13 @@ def get_depenses_semaine(offset=0):
         SELECT DAYOFWEEK(dated), COALESCE(SUM(montantd),0)
         FROM Depense
         WHERE utilisateur = %s
-        AND dated >= %s AND dated <= %s
+        AND dated >= %s AND dated < %s
         GROUP BY DAYOFWEEK(dated)
         """
     try:
         aujourdhui = datetime.now()
-        debut = aujourdhui + timedelta(weeks=offset) - timedelta(days=aujourdhui.weekday())
-        fin = debut + timedelta(days=6)
+        debut = (aujourdhui + timedelta(weeks=offset) - timedelta(days=aujourdhui.weekday())).replace(hour=0,minute=0,second=0,microsecond=0)
+        fin = debut + timedelta(days=7)
         resultat = [0] * 7
         with DBConnection() as conx:
             curseur = conx.cursor()
@@ -357,13 +357,13 @@ def get_economie_semaine(offset=0):
         SELECT DAYOFWEEK(datee), COALESCE(SUM(montante),0)
         FROM Economie
         WHERE utilisateur = %s
-        AND datee >= %s AND datee <= %s
+        AND datee >= %s AND datee < %s
         GROUP BY DAYOFWEEK(datee)
         """
     try:
         aujourdhui = datetime.now()
-        debut = aujourdhui + timedelta(weeks=offset) - timedelta(days=aujourdhui.weekday())
-        fin = debut + timedelta(days=6)
+        debut = (aujourdhui + timedelta(weeks=offset) - timedelta(days=aujourdhui.weekday())).replace(hour=0,minute=0,second=0,microsecond=0)
+        fin = debut + timedelta(days=7)
         resultat = [0] * 7
         with DBConnection() as conx:
             curseur = conx.cursor()
