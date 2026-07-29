@@ -1,6 +1,6 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QDialog, QVBoxLayout, QHBoxLayout, QPushButton, QLabel, QWidget
-from PyQt6.QtGui import QPixmap
+from PyQt6.QtGui import QPixmap, QIcon
 from PyQt6.QtCore import Qt, QPoint
 
 from views.main_window import MainWindow
@@ -15,6 +15,8 @@ class WelcomeWindow(QWidget):
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         self.setFixedSize(400, 500)
         self.setStyleSheet(f"background-color: {FOND_SECONDAIRE}; border-radius: 12px;")
+        self.setWindowIcon(QIcon(":/assets/icons/logo3.png")) 
+        self.setWindowTitle("ExpApp")
         self._old_pos = None
         self._init_ui()
 
@@ -55,7 +57,7 @@ class WelcomeWindow(QWidget):
         self.logo_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout_principal.addWidget(self.logo_label)
 
-        title_app = QLabel("ExpenseApp")
+        title_app = QLabel("ExpApp")
         title_app.setStyleSheet(f"color: {TEXTE_PRINCIPAL}; font-size: 24px; font-weight: bold;")
         title_app.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout_principal.addWidget(title_app)
@@ -123,6 +125,11 @@ class WelcomeWindow(QWidget):
 
 def main():
     app = QApplication(sys.argv)
+
+    import ctypes
+    myappid = 'mycompany.myproduct.subproduct.version'
+    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+
     welcome = WelcomeWindow()
     welcome.show()
     sys.exit(app.exec())

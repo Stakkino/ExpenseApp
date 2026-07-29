@@ -179,9 +179,9 @@ class MainWindow(QMainWindow):
             self.avatar_label.setPixmap(pixmap)
             self.avatar_label.setScaledContents(True)
 
-        nom_label = QLabel(f"{Session.utilisateur_prenom}")
+        nom_label = QLabel(f"{Session.utilisateur_nom}")
         nom_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        nom_label.setStyleSheet(f"color: {TEXTE_PRINCIPAL}; font-size: 13px; font-weight: bold;")
+        nom_label.setStyleSheet(f"color: {TEXTE_PRINCIPAL}; font-size: 10px; font-weight: bold;")
 
         layout.addWidget(self.avatar_label, alignment=Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(nom_label)
