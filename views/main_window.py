@@ -39,16 +39,16 @@ class MainWindow(QMainWindow):
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         self._configurer_fenetre()
         self._construire_ui()
+        self.setWindowIcon(QIcon(":/assets/icons/logo3.png")) 
         self._old_pos = None
         self._is_maximized = False
 
     def _configurer_fenetre(self):
-        self.setWindowTitle("ExpenseApp")
+        self.setWindowTitle("ExpApp")
         self.setMinimumSize(1100, 700)
         self.setStyleSheet(f"""
             QMainWindow {{
                 background-color: {FOND_PRINCIPAL};
-                background-image: url("assets/avatars/logo.png");
                 background-repeat: no-repeat;
                 background-position: center;
             }}
