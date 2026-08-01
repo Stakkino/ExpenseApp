@@ -11,4 +11,8 @@ dist/
 resources_rc.py
 assets/avatars/
 utils/email_service.py
+utils/theme_manager.py
+views/apropos.py
+views/parametres_widget.py
+views/main_window.py
 data/

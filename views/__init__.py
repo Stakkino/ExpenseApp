@@ -10,5 +10,6 @@ from .main_window import ClickableAvatar, MainWindow
 from .message_dialog import CustomMessageDialog
 from .otp_dialog import OtpDialog
 from .profil_dialog import ProfilDialog
+from .apropos import AboutWidget
 from .recette_dialog import RecetteDialog
 from .table_widget import TableWidget
