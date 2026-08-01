@@ -4,6 +4,8 @@ from PyQt6.QtGui import QPixmap
 from BlurWindow.blurWindow import blur
 
 from utils.constants import *
+from utils.theme_manager import ThemeManager
+theme = ThemeManager.theme()
 import resources_rc
 
 
@@ -50,7 +52,7 @@ class CustomMessageDialog(QDialog):
         }}
 
         QPushButton{{
-            background:{ACCENT_PRIMAIRE};
+            background:{theme['ACCENT_PRIMAIRE']};
             color:white;
             border:none;
             border-radius:8px;

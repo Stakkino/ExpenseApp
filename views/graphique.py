@@ -1,14 +1,16 @@
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from utils.constants import *
+from utils.theme_manager import ThemeManager
+theme = ThemeManager.theme()
 
 
 class GraphiqueManager:
     def __init__(self):
-        self.fig = Figure( figsize=(7, 3.5), dpi=100,facecolor=FOND_CARTE)
+        self.fig = Figure( figsize=(7, 3.5), dpi=100,facecolor=theme['FOND_CARTE'])
         self.canvas = FigureCanvas(self.fig)
         self.ax = self.fig.add_subplot(111)
-        self.ax.set_facecolor(FOND_CARTE)
+        self.ax.set_facecolor(theme['FOND_CARTE'])
         self._style_ax()
 
     def _style_ax(self):
@@ -51,7 +53,7 @@ def creer_figure_graphique():
 
 def dessiner_courbe(ax,recettes,depenses,economies):
     ax.clear()
-    ax.set_facecolor(FOND_CARTE)
+    ax.set_facecolor(theme['FOND_CARTE'])
     ax.tick_params(axis='x',colors='white',labelsize=9)
     ax.tick_params(axis='y',colors='white',labelsize=9)
     for spine in ax.spines.values():
@@ -68,8 +70,8 @@ def dessiner_courbe(ax,recettes,depenses,economies):
     ax.bar([i + largeur for i in x],economies,width=largeur,color="#3D9BE9",label="Économies")
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
-    ax.set_ylabel("Montant (Ar)",color="white",fontsize=9)
-    ax.legend(loc="upper center",bbox_to_anchor=(0.5, 1.30),ncol=3,frameon=False,labelcolor="white",fontsize=8)
+    ax.set_ylabel("Montant (Ar)",color=theme['TEXTE_PRINCIPAL'],fontsize=9)
+    ax.legend(loc="upper center",bbox_to_anchor=(0.5, 1.30),ncol=3,frameon=False,labelcolor=theme['TEXTE_PRINCIPAL'],fontsize=8)
     if any(recettes) or any(depenses) or any(economies):
         ax.grid(axis='y',color='white',linestyle='--',alpha=0.15)
     ax.figure.subplots_adjust(left=0.08,right=0.98,top=0.90,bottom=0.20)

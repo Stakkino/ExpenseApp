@@ -3,6 +3,8 @@ from PyQt6.QtCore import Qt
 from time import time
 
 from utils.constants import *
+from utils.theme_manager import ThemeManager
+theme = ThemeManager.theme()
 from views.message_dialog import CustomMessageDialog
 
 
@@ -13,20 +15,20 @@ class OtpDialog(QDialog):
         self.created_at = time()
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         self.setFixedSize(320, 220)
-        self.setStyleSheet(f"background-color:{FOND_SECONDAIRE};")
+        self.setStyleSheet(f"background-color:{theme['FOND_SECONDAIRE']};")
         self._build_ui()
 
     def _build_ui(self):
         layout = QVBoxLayout(self)
         titre = QLabel("Vérification Email")
-        titre.setStyleSheet(f"""color:{TEXTE_PRINCIPAL};font-size:16px;font-weight:bold;""")
+        titre.setStyleSheet(f"""color:{theme['TEXTE_PRINCIPAL']};font-size:16px;font-weight:bold;""")
         self.input_code = QLineEdit()
         self.input_code.setPlaceholderText("Entrez le code reçu")
         self.input_code.setStyleSheet(
             f"""
-            background-color:{FOND_INPUT};
-            color:{TEXTE_PRINCIPAL};
-            border:1px solid {BORDURE};
+            background-color:{theme['FOND_INPUT']};
+            color:{theme['TEXTE_PRINCIPAL']};
+            border:1px solid {theme['BORDURE']};
             border-radius:6px;
             padding:8px;
             """
@@ -36,7 +38,7 @@ class OtpDialog(QDialog):
         btn.setStyleSheet(
             f"""
             QPushButton{{
-                background-color:{BLEU_ECONOMIE};
+                background-color:{theme['BLEU_ECONOMIE']};
                 color:white;
                 border:none;
                 border-radius:6px;

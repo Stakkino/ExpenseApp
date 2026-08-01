@@ -4,6 +4,8 @@ from decimal import Decimal, InvalidOperation
 from database import *
 from database.connection import DBConnection
 from utils.constants import *
+from utils.theme_manager import ThemeManager
+theme = ThemeManager.theme()
 from views.message_dialog import CustomMessageDialog
 
 
@@ -18,7 +20,7 @@ class DepenseDialog(QDialog):
     def _configurer_fenetre(self):
         self.setWindowTitle("Nouvelle Dépense")
         self.setFixedSize(380, 400)
-        self.setStyleSheet(f"background-color: {FOND_SECONDAIRE};")
+        self.setStyleSheet(f"background-color: {theme['FOND_SECONDAIRE']};")
 
     def _construire_ui(self):
         layout = QVBoxLayout(self)
@@ -27,12 +29,12 @@ class DepenseDialog(QDialog):
 
         # ── Titre ──
         titre = QLabel("Ajouter une dépense")
-        titre.setStyleSheet(f"color: {TEXTE_PRINCIPAL}; font-size: 16px; font-weight: bold;")
+        titre.setStyleSheet(f"color: {theme['TEXTE_PRINCIPAL']}; font-size: 16px; font-weight: bold;")
         layout.addWidget(titre)
 
         # ── Solde disponible (info) ──
         self.label_solde = QLabel()
-        self.label_solde.setStyleSheet(f"color: {TEXTE_SECONDAIRE}; font-size: 12px;")
+        self.label_solde.setStyleSheet(f"color: {theme['TEXTE_SECONDAIRE']}; font-size: 12px;")
         layout.addWidget(self.label_solde)
 
         # ── Champ Montant ──
@@ -60,11 +62,11 @@ class DepenseDialog(QDialog):
         # ── Boutons ──
         boutons_layout = QHBoxLayout()
         btn_annuler = QPushButton("Annuler")
-        btn_annuler.setStyleSheet(self._style_bouton(FOND_INPUT, TEXTE_SECONDAIRE))
+        btn_annuler.setStyleSheet(self._style_bouton(theme['FOND_INPUT'], theme['TEXTE_SECONDAIRE']))
         btn_annuler.clicked.connect(self.reject) 
 
         btn_valider = QPushButton("Ajouter")
-        btn_valider.setStyleSheet(self._style_bouton(ROUGE_DEPENSE, "#FFFFFF"))
+        btn_valider.setStyleSheet(self._style_bouton(theme['ROUGE_DEPENSE'], "#FFFFFF"))
         btn_valider.clicked.connect(self._valider)
 
         boutons_layout.addWidget(btn_annuler)
@@ -78,16 +80,16 @@ class DepenseDialog(QDialog):
     
     def _creer_label(self, texte: str) -> QLabel:
         label = QLabel(texte)
-        label.setStyleSheet(f"color: {TEXTE_LABEL}; font-size: 11px; font-weight: bold;")
+        label.setStyleSheet(f"color: {theme['TEXTE_LABEL']}; font-size: 11px; font-weight: bold;")
         return label
 
     
     def _style_input(self) -> str:
         return f"""
             QWidget {{
-                background-color: {FOND_INPUT};
-                color: {TEXTE_PRINCIPAL};
-                border: 1px solid {BORDURE};
+                background-color: {theme['FOND_INPUT']};
+                color: {theme['TEXTE_PRINCIPAL']};
+                border: 1px solid {theme['BORDURE']};
                 border-radius: 6px;
                 padding: 8px;
                 font-size: 13px;

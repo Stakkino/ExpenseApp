@@ -7,6 +7,8 @@ from views.main_window import MainWindow
 from views.login_dialog import LoginDialog      
 from views.incription_dialog import InscriptionDialog 
 from utils.constants import *
+from utils.theme_manager import ThemeManager
+theme = ThemeManager.theme()
 import resources_rc
 
 class WelcomeWindow(QWidget):
@@ -14,7 +16,7 @@ class WelcomeWindow(QWidget):
         super().__init__()
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         self.setFixedSize(400, 500)
-        self.setStyleSheet(f"background-color: {FOND_SECONDAIRE}; border-radius: 12px;")
+        self.setStyleSheet(f"background-color: {theme['FOND_SECONDAIRE']}; border-radius: 12px;")
         self.setWindowIcon(QIcon(":/assets/icons/logo3.png")) 
         self.setWindowTitle("ExpApp")
         self._old_pos = None
@@ -58,12 +60,12 @@ class WelcomeWindow(QWidget):
         layout_principal.addWidget(self.logo_label)
 
         title_app = QLabel("ExpApp")
-        title_app.setStyleSheet(f"color: {TEXTE_PRINCIPAL}; font-size: 24px; font-weight: bold;")
+        title_app.setStyleSheet(f"color: {theme['TEXTE_PRINCIPAL']}; font-size: 24px; font-weight: bold;")
         title_app.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout_principal.addWidget(title_app)
 
         subtitle = QLabel("Gérez vos finances en toute simplicité")
-        subtitle.setStyleSheet(f"color: {TEXTE_SECONDAIRE}; font-size: 13px;")
+        subtitle.setStyleSheet(f"color: {theme['TEXTE_SECONDAIRE']}; font-size: 13px;")
         subtitle.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout_principal.addWidget(subtitle)
 
@@ -74,7 +76,7 @@ class WelcomeWindow(QWidget):
         self.btn_login.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_login.setStyleSheet(f"""
             QPushButton {{
-                background-color: {ACCENT_PRIMAIRE};
+                background-color: {theme['ACCENT_PRIMAIRE']};
                 color: white;
                 border: none;
                 border-radius: 8px;
@@ -92,15 +94,15 @@ class WelcomeWindow(QWidget):
         self.btn_register.setCursor(Qt.CursorShape.PointingHandCursor)
         self.btn_register.setStyleSheet(f"""
             QPushButton {{
-                background-color: {FOND_INPUT};
-                color: {TEXTE_PRINCIPAL};
-                border: 1px solid {BORDURE};
+                background-color: {theme['FOND_INPUT']};
+                color: {theme['TEXTE_PRINCIPAL']};
+                border: 1px solid {theme['BORDURE']};
                 border-radius: 8px;
                 padding: 12px;
                 font-size: 14px;
                 font-weight: bold;
             }}
-            QPushButton:hover {{ background-color: {FOND_CARTE}; }}
+            QPushButton:hover {{ background-color: {theme['FOND_CARTE']}; }}
         """)
         self.btn_register.clicked.connect(self._ouvrir_inscription)
         layout_principal.addWidget(self.btn_register)

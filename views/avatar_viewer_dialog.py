@@ -4,6 +4,8 @@ from PyQt6.QtCore import Qt, pyqtSignal
 
 from session import Session
 from utils.constants import *
+from utils.theme_manager import ThemeManager
+theme = ThemeManager.theme()
 from views.avatars_dialog import AvatarChangeDialog
 from utils.avatar_manager import enregistrer_avatar
 
@@ -65,7 +67,7 @@ class AvatarViewerDialog(QDialog):
         #Boutton
         boutons_layout = QHBoxLayout()
         btn_annuler = QPushButton("Annuler")
-        btn_annuler.setStyleSheet(self._style_bouton(FOND_INPUT, TEXTE_SECONDAIRE))
+        btn_annuler.setStyleSheet(self._style_bouton(theme['FOND_INPUT'], theme['TEXTE_SECONDAIRE']))
         btn_annuler.clicked.connect(self.reject) 
 
         btn_CA = QPushButton("Changer Avatar")

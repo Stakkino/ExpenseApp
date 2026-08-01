@@ -4,6 +4,8 @@ from PyQt6.QtCore import Qt
 import resources_rc
 
 from database import *
+from utils.theme_manager import ThemeManager
+theme = ThemeManager.theme()
 from utils.formatters import format_montant
 from utils.constants import *
 from views.graphique import dessiner_courbe, creer_figure_graphique
@@ -13,7 +15,7 @@ class TransactionRow(QFrame):
         super().__init__()
         self.setStyleSheet("background-color: transparent;")
         layout = QHBoxLayout(self)
-        color = VERT_RECETTE if type_trans == 'Recette' else ROUGE_DEPENSE
+        color = theme['VERT_RECETTE'] if type_trans == 'Recette' else theme['ROUGE_DEPENSE']
         signe = "+" if type_trans == 'Recette' else "-"
         label_desc = QLabel(f"{desc}\n{str(date)}")
         label_desc.setStyleSheet("color: white; font-size: 12px;")
@@ -27,7 +29,7 @@ class DashboardWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
-        self.setStyleSheet(f"background-color: {FOND_PRINCIPAL};")
+        self.setStyleSheet(f"background-color: {theme['FOND_PRINCIPAL']};")
         self.offset_semaine = 0
         self._construire_ui()
         self.refresh()
@@ -43,10 +45,10 @@ class DashboardWidget(QWidget):
         self.cartes_layout.setSpacing(16)
 
         # Création des 4 cartes — gardées en référence pour refresh()
-        self.carte_solde    = self._creer_carte("Solde Total",      "0 Ar", JAUNE_SOLDE,    ":/assets/icons/solde.png")
-        self.carte_depense  = self._creer_carte("Total Dépenses",   "0 Ar", ROUGE_DEPENSE,  ":/assets/icons/depense.png")
-        self.carte_economie = self._creer_carte("Économies",        "0 Ar", BLEU_ECONOMIE,  ":/assets/icons/economie.png")
-        self.carte_dispo    = self._creer_carte("Solde Disponible", "0 Ar", VERT_RECETTE,   ":/assets/icons/sdispo.png")
+        self.carte_solde    = self._creer_carte("Solde Total",      "0 Ar", theme['JAUNE_SOLDE'],    ":/assets/icons/solde.png")
+        self.carte_depense  = self._creer_carte("Total Dépenses",   "0 Ar", theme['ROUGE_DEPENSE'],  ":/assets/icons/depense.png")
+        self.carte_economie = self._creer_carte("Économies",        "0 Ar", theme['BLEU_ECONOMIE'],  ":/assets/icons/economie.png")
+        self.carte_dispo    = self._creer_carte("Solde Disponible", "0 Ar", theme['VERT_RECETTE'],   ":/assets/icons/sdispo.png")
         self.cartes_layout.addWidget(self.carte_solde)
         self.cartes_layout.addWidget(self.carte_depense)
         self.cartes_layout.addWidget(self.carte_economie)
@@ -101,7 +103,7 @@ class DashboardWidget(QWidget):
         carte.setFixedHeight(120)
         carte.setStyleSheet(f"""
             QFrame {{
-                background-color: {FOND_CARTE};
+                background-color: {theme['FOND_CARTE']};
                 border-radius: 12px;
             }}
             """)
@@ -126,7 +128,7 @@ class DashboardWidget(QWidget):
         textes_layout = QVBoxLayout()
         textes_layout.setSpacing(4)
         label_titre = QLabel(titre)
-        label_titre.setStyleSheet(f"""color: {TEXTE_LABEL};font-size: 11px;font-weight: bold;letter-spacing: 1px;""")
+        label_titre.setStyleSheet(f"""color: {theme['TEXTE_LABEL']};font-size: 11px;font-weight: bold;letter-spacing: 1px;""")
         label_valeur = QLabel(valeur)
         label_valeur.setStyleSheet(f"""color: {couleur};font-size: 20px;font-weight: bold;""")
         textes_layout.addWidget(label_titre)
@@ -148,7 +150,7 @@ class DashboardWidget(QWidget):
             container = QFrame()
             container.setStyleSheet(f"""
                 QFrame {{
-                    background-color: {FOND_CARTE};
+                    background-color: {theme['FOND_CARTE']};
                     border-radius: 12px;
                 }}
                 """)      

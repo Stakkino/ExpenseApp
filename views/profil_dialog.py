@@ -5,6 +5,8 @@ from email_validator import validate_email, EmailNotValidError
 from database import *
 from utils import *
 from utils.constants import *
+from utils.theme_manager import ThemeManager
+theme = ThemeManager.theme()
 from session import Session
 from views import *
 
@@ -18,7 +20,7 @@ class ProfilDialog(QDialog):
     def _configurer_fenetre(self):
         self.setWindowTitle("ExpApp")
         self.setFixedSize(380, 500) 
-        self.setStyleSheet(f"background-color: {FOND_SECONDAIRE};")
+        self.setStyleSheet(f"background-color: {theme['FOND_SECONDAIRE']};")
 
     def _construire_ui(self):
         layout = QVBoxLayout(self)
@@ -27,7 +29,7 @@ class ProfilDialog(QDialog):
 
         # ── Titre ──
         titre = QLabel("Modification Info")
-        titre.setStyleSheet(f"color: {TEXTE_PRINCIPAL}; font-size: 16px; font-weight: bold;")
+        titre.setStyleSheet(f"color: {theme['TEXTE_PRINCIPAL']}; font-size: 16px; font-weight: bold;")
         layout.addWidget(titre)
 
         # ── Champ Nom ──
@@ -66,23 +68,23 @@ class ProfilDialog(QDialog):
         self.input_datenaissance.setDate(daty_session)
         self.input_datenaissance.setStyleSheet(f"""
             QDateEdit {{
-                background-color: {FOND_INPUT};
-                color: {TEXTE_PRINCIPAL};
-                border: 1px solid {BORDURE};
+                background-color: {theme['FOND_INPUT']};
+                color: {theme['TEXTE_PRINCIPAL']};
+                border: 1px solid {theme['BORDURE']};
                 border-radius: 6px;
                 padding: 8px;
                 font-size: 13px;
             }}
 
             QCalendarWidget {{
-                background-color: {FOND_INPUT};
-                color: {TEXTE_PRINCIPAL};
-                border: 1px solid {BORDURE};
+                background-color: {theme['FOND_INPUT']};
+                color: {theme['TEXTE_PRINCIPAL']};
+                border: 1px solid {theme['BORDURE']};
                 border-radius: 8px;
             }}
 
             QCalendarWidget QToolButton {{
-                color: {TEXTE_PRINCIPAL};
+                color: {theme['TEXTE_PRINCIPAL']};
                 background-color: transparent;
                 font-size: 13px;
                 font-weight: bold;
@@ -90,14 +92,14 @@ class ProfilDialog(QDialog):
             }}
 
             QCalendarWidget QMenu {{
-                background-color: {FOND_INPUT};
-                color: {TEXTE_PRINCIPAL};
+                background-color: {theme['FOND_INPUT']};
+                color: {theme['TEXTE_PRINCIPAL']};
             }}
 
             QCalendarWidget QAbstractItemView {{
-                background-color: {FOND_INPUT};
-                color: {TEXTE_PRINCIPAL};
-                selection-background-color: {BLEU_ECONOMIE};
+                background-color: {theme['FOND_INPUT']};
+                color: {theme['TEXTE_PRINCIPAL']};
+                selection-background-color: {theme['BLEU_ECONOMIE']};
                 selection-color: white;
                 border-radius: 6px;
             }}
@@ -109,7 +111,7 @@ class ProfilDialog(QDialog):
         layout.addWidget(self.input_datenaissance)
         
         self.label_info = QLabel("Réservé aux personnes de 7 ans et plus")
-        self.label_info.setStyleSheet(f"font-size:11px; color:{TEXTE_LABEL}; margin-top:-2px; margin-bottom:10px")
+        self.label_info.setStyleSheet(f"font-size:11px; color:{theme['TEXTE_LABEL']}; margin-top:-2px; margin-bottom:10px")
         layout.addWidget(self.label_info)
 
         layout.addStretch()
@@ -117,11 +119,11 @@ class ProfilDialog(QDialog):
         # ── Boutons ──
         boutons_layout = QHBoxLayout()
         btn_annuler = QPushButton("Annuler")
-        btn_annuler.setStyleSheet(self._style_bouton(FOND_INPUT, TEXTE_SECONDAIRE))
+        btn_annuler.setStyleSheet(self._style_bouton(theme['FOND_INPUT'], theme['TEXTE_SECONDAIRE']))
         btn_annuler.clicked.connect(self.reject)
 
         btn_valider = QPushButton("Sauvegarder")
-        btn_valider.setStyleSheet(self._style_bouton(BLEU_ECONOMIE, "#FFFFFF"))
+        btn_valider.setStyleSheet(self._style_bouton(theme['BLEU_ECONOMIE'], "#FFFFFF"))
         btn_valider.clicked.connect(self._valider)
 
         boutons_layout.addWidget(btn_annuler)
@@ -130,15 +132,15 @@ class ProfilDialog(QDialog):
 
     def _creer_label(self, texte: str) -> QLabel:
         label = QLabel(texte)
-        label.setStyleSheet(f"color: {TEXTE_LABEL}; font-size: 11px; font-weight: bold;")
+        label.setStyleSheet(f"color: {theme['TEXTE_LABEL']}; font-size: 11px; font-weight: bold;")
         return label
 
     def _style_input(self) -> str:
         return f"""
             QWidget {{
-                background-color: {FOND_INPUT};
-                color: {TEXTE_PRINCIPAL};
-                border: 1px solid {BORDURE};
+                background-color: {theme['FOND_INPUT']};
+                color: {theme['TEXTE_PRINCIPAL']};
+                border: 1px solid {theme['BORDURE']};
                 border-radius: 6px;
                 padding: 8px;
                 font-size: 13px;

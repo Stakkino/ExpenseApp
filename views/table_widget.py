@@ -3,6 +3,8 @@ from PyQt6.QtCore import Qt, QDate
 
 from database import *
 from utils.constants import *
+from utils.theme_manager import ThemeManager
+theme = ThemeManager.theme()
 
 
 class TableWidget(QWidget):
@@ -10,7 +12,7 @@ class TableWidget(QWidget):
         super().__init__(parent)
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         self.setStyleSheet(f"""
-            background-color: {FOND_PRINCIPAL};
+            background-color: {theme['FOND_PRINCIPAL']};
             """)
         self.type_courant = "recette"
         self._construire_ui()
@@ -24,7 +26,7 @@ class TableWidget(QWidget):
         # ================= FILTRE =================
         ligne_filtre = QHBoxLayout()
         ligne_filtre.setSpacing(12)
-        style_label = f""" QLabel {{color:{TEXTE_PRINCIPAL};font-size:12px;font-weight:bold;}}"""
+        style_label = f""" QLabel {{color:{theme['TEXTE_PRINCIPAL']};font-size:12px;font-weight:bold;}}"""
         lbl1 = QLabel("Date début")
         lbl1.setStyleSheet(style_label)
         self.dateDebut = QDateEdit()
@@ -39,15 +41,15 @@ class TableWidget(QWidget):
 
         style_date = f"""
             QDateEdit {{
-                background:{FOND_INPUT};
-                color:{TEXTE_PRINCIPAL};
-                border:1px solid {BORDURE};
+                background:{theme['FOND_INPUT']};
+                color:{theme['TEXTE_PRINCIPAL']};
+                border:1px solid {theme['BORDURE']};
                 border-radius:8px;
                 padding:6px 10px;
                 font-size:12px;
             }}
             QDateEdit:hover {{
-                    border:1px solid {ACCENT_PRIMAIRE};
+                    border:1px solid {theme['ACCENT_PRIMAIRE']};
                 }}
             QDateEdit::drop-down {{
                     border:none;
@@ -60,7 +62,7 @@ class TableWidget(QWidget):
         self.btnFiltrer = QPushButton("Filtrer")
         self.btnFiltrer.setStyleSheet(f"""
             QPushButton {{
-                background:{ACCENT_PRIMAIRE};
+                background:{theme['ACCENT_PRIMAIRE']};
                 color:white;
                 border:none;
                 border-radius:8px;
@@ -69,10 +71,10 @@ class TableWidget(QWidget):
                 font-weight:bold;
             }}
             QPushButton:hover {{
-                background:{ACCENT_HOVER};
+                background:{theme['ACCENT_HOVER']};
             }}
             QPushButton:pressed {{
-                background:{ACCENT_PRESSED};
+                background:{theme['ACCENT_PRESSED']};
             }}
         """)
 
@@ -80,20 +82,20 @@ class TableWidget(QWidget):
         self.btnReset = QPushButton("Réinitialiser")
         self.btnReset.setStyleSheet(f"""
             QPushButton {{
-                background:{FOND_CARTE};
-                color:{TEXTE_PRINCIPAL};
-                border:1px solid {BORDURE};
+                background:{theme['FOND_CARTE']};
+                color:{theme['TEXTE_PRINCIPAL']};
+                border:1px solid {theme['BORDURE']};
                 border-radius:8px;
                 padding:8px 18px;
                 font-size:12px;
                 font-weight:bold;
             }}
             QPushButton:hover {{
-                background:{BORDURE};
-                border:1px solid {ACCENT_PRIMAIRE};
+                background:{theme['BORDURE']};
+                border:1px solid {theme['ACCENT_PRIMAIRE']};
             }}
             QPushButton:pressed {{
-                background:{FOND_INPUT};
+                background:{theme['FOND_INPUT']};
             }}
         """)
         for widget in (self.btnFiltrer,self.btnReset):
@@ -122,25 +124,25 @@ class TableWidget(QWidget):
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.table.setStyleSheet(f"""
             QTableWidget {{
-                background:{FOND_SECONDAIRE};
-                alternate-background-color:{FOND_CARTE};
-                color:{TEXTE_PRINCIPAL};
-                border:1px solid {BORDURE};
+                background:{theme['FOND_SECONDAIRE']};
+                alternate-background-color:{theme['FOND_CARTE']};
+                color:{theme['TEXTE_PRINCIPAL']};
+                border:1px solid {theme['BORDURE']};
                 border-radius:12px;
-                gridline-color:{BORDURE};
+                gridline-color:{theme['BORDURE']};
                 font-size:12px;
-                selection-background-color:{ACCENT_PRIMAIRE};
+                selection-background-color:{theme['ACCENT_PRIMAIRE']};
                 selection-color:white;
             }}
             QTableWidget::item {{
                 padding:8px;
-                border-bottom:1px solid {BORDURE};
+                border-bottom:1px solid {theme['BORDURE']};
             }}
             QTableWidget::item:hover {{
                 background:#243B55;
             }}
             QHeaderView::section {{
-                background:{ACCENT_PRIMAIRE};
+                background:{theme['ACCENT_PRIMAIRE']};
                 color:white;
                 font-size:12px;
                 font-weight:bold;
@@ -149,11 +151,11 @@ class TableWidget(QWidget):
                 padding-left:8px;
             }}
             QScrollBar:vertical {{
-                background:{FOND_PRINCIPAL};
+                background:{theme['FOND_PRINCIPAL']};
                 width:10px;
             }}
             QScrollBar::handle:vertical {{
-                background:{ACCENT_PRIMAIRE};
+                background:{theme['ACCENT_PRIMAIRE']};
                 border-radius:5px;
             }}
         """)

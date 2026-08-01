@@ -3,6 +3,8 @@ from PyQt6.QtWidgets import QDialog,QVBoxLayout,QLabel,QListWidget,QListWidgetIt
 from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import Qt, QSize, QDirIterator
 from utils.constants import *
+from utils.theme_manager import ThemeManager
+theme = ThemeManager.theme()
 from views.message_dialog import CustomMessageDialog 
 import resources_rc
 
@@ -40,7 +42,7 @@ class AvatarChangeDialog(QDialog):
         #boutton
         boutons_layout = QHBoxLayout()
         btn_annuler = QPushButton("Annuler")
-        btn_annuler.setStyleSheet(self._style_bouton(FOND_INPUT, TEXTE_SECONDAIRE))
+        btn_annuler.setStyleSheet(self._style_bouton(theme['FOND_INPUT'], theme['TEXTE_SECONDAIRE']))
         btn_annuler.clicked.connect(self.reject) 
 
         btn_enregstr = QPushButton("Enregistrer")
