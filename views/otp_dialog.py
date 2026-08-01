@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QDialog,QVBoxLayout,QLabel,QLineEdit,QPushButton
 from PyQt6.QtCore import Qt
+from time import time
 
 from utils.constants import *
 from views.message_dialog import CustomMessageDialog
@@ -9,6 +10,7 @@ class OtpDialog(QDialog):
     def __init__(self, otp, parent=None):
         super().__init__(parent)
         self.otp = str(otp)
+        self.created_at = time()
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
         self.setFixedSize(320, 220)
         self.setStyleSheet(f"background-color:{FOND_SECONDAIRE};")
@@ -54,7 +56,12 @@ class OtpDialog(QDialog):
 
     def verifier(self):
         code = self.input_code.text().strip()
+        if time() - self.created_at > 300:
+            CustomMessageDialog("Expiration","Le code OTP a expiré. Réessayez.","warning",self).exec()
+            self.reject()
+            return
+
         if code == self.otp:
             self.accept()
             return
-        CustomMessageDialog( "Erreur", "Code OTP incorrect.", "warning", self).exec()
+        CustomMessageDialog( "Erreur", "Code OTP incorrect.","warning", self).exec()

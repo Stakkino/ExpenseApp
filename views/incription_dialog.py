@@ -1,9 +1,11 @@
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel,QLineEdit, QDateEdit, QPushButton
 from PyQt6.QtCore import Qt, QDate
+from email_validator import validate_email, EmailNotValidError
 
 from database import *
 from utils.constants import *
-from views.message_dialog import CustomMessageDialog
+from utils import *
+from views import *
 
 
 class InscriptionDialog(QDialog):
@@ -14,7 +16,7 @@ class InscriptionDialog(QDialog):
         self._construire_ui()
 
     def _configurer_fenetre(self):
-        self.setWindowTitle("Expense Application")
+        self.setWindowTitle("ExApp")
         self.setFixedSize(450, 630)
         self.setStyleSheet(f"background-color: {FOND_SECONDAIRE};")
 
@@ -181,6 +183,22 @@ class InscriptionDialog(QDialog):
         if cmdp != mdp:
             CustomMessageDialog("Vérification", "Mots de passe non identique", "info", self).exec()
             return
+        
+        try:
+            validate_email(email)
+        except EmailNotValidError:
+            CustomMessageDialog("Erreur","Adresse email invalide.","warning",self).exec()
+            return
+
+        otp = envoyer_otp(email)
+
+        if not otp:
+            CustomMessageDialog("Erreur","Impossible d'envoyer le code OTP.","error",self ).exec()
+            return
+        dialog = OtpDialog(otp, self)
+        if not dialog.exec():
+            return
+
         
         succes = incription(nom, prenom, email, datenaissance, mdp)
 

@@ -24,7 +24,7 @@ class LoginDialog(QDialog):
         layout.setSpacing(14)
 
         # ── Titre ──
-        titre = QLabel("Connexion")
+        titre = QLabel("Connexion ExpApp")
         titre.setStyleSheet(f"color: {TEXTE_PRINCIPAL}; font-size: 16px; font-weight: bold;")
         layout.addWidget(titre)
 

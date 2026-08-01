@@ -1,10 +1,12 @@
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QLineEdit, QDateEdit, QPushButton
 from PyQt6.QtCore import Qt, QDate
+from email_validator import validate_email, EmailNotValidError
 
 from database import *
+from utils import *
 from utils.constants import *
 from session import Session
-from views.message_dialog import CustomMessageDialog
+from views import *
 
 class ProfilDialog(QDialog):
     def __init__(self, parent = None):
@@ -14,7 +16,7 @@ class ProfilDialog(QDialog):
         self._construire_ui()
 
     def _configurer_fenetre(self):
-        self.setWindowTitle("Expense Application")
+        self.setWindowTitle("ExpApp")
         self.setFixedSize(380, 500) 
         self.setStyleSheet(f"background-color: {FOND_SECONDAIRE};")
 
@@ -157,6 +159,7 @@ class ProfilDialog(QDialog):
         """
     
     def _valider(self):
+        ancien_email  = Session.utilisateur_email
         nom           = self.input_nom.text().strip()
         prenom        = self.input_prenom.text().strip()
         email         = self.input_email.text().strip()
@@ -166,7 +169,22 @@ class ProfilDialog(QDialog):
         if not nom or not email:
             CustomMessageDialog("Champ vide", "Veuillez saisir votre Nom ou votre Email.", "warning", self).exec()
             return
-        
+
+        try:
+            validate_email(email)
+        except EmailNotValidError:
+            CustomMessageDialog("Erreur","Adresse email invalide.","warning",self).exec()
+            return
+
+        if email != ancien_email:
+            otp = envoyer_otp(email)
+            if not otp:
+                CustomMessageDialog("Erreur","Impossible d'envoyer le code OTP.","error",self).exec()
+                return
+            dialog = OtpDialog(otp, self)
+            if not dialog.exec():
+                return
+
         succes = modification_info(nom, prenom, email, datenaissance)
 
         if succes:
