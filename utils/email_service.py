@@ -3,8 +3,8 @@ import smtplib
 from email.message import EmailMessage
 
 
-GMAIL_SENDER = "expenseapp@gmail.com"
-APP_PASSWORD = "XXXX XXXX XXXX XXXX"
+GMAIL_SENDER = "nndstakkino@gmail.com"
+APP_PASSWORD = "mathematique"
 
 def envoyer_otp(email_destinataire):
     try:

@@ -10,4 +10,5 @@ dist/
 
 resources_rc.py
 assets/avatars/
+utils/email_service.py
 data/
