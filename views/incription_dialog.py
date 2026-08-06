@@ -8,6 +8,8 @@ from utils import *
 from utils.theme_manager import ThemeManager
 theme = ThemeManager.theme()
 from views import *
+from views.otp_dialog import OtpDialog
+from views.message_dialog import CustomMessageDialog
 
 
 class InscriptionDialog(QDialog):

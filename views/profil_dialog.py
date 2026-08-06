@@ -8,7 +8,8 @@ from utils.constants import *
 from utils.theme_manager import ThemeManager
 theme = ThemeManager.theme()
 from session import Session
-from views import *
+from views.otp_dialog import OtpDialog
+from views.message_dialog import CustomMessageDialog
 
 class ProfilDialog(QDialog):
     def __init__(self, parent = None):
